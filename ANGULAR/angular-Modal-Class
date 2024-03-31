@@ -1,0 +1,105 @@
+The `User` class provided in your example is a common pattern used in web applications, especially those with user authentication and authorization functionalities. Let's discuss why such a class is used:
+
+1. **Data Representation**:
+
+   - The `User` class serves as a data model for representing user information in the application. It encapsulates various attributes of a user, such as their ID, email, name, role, and authentication tokens.
+
+2. **Centralized User Management**:
+
+   - By defining a `User` class, you centralize user-related properties and behavior in one place. This makes it easier to manage user data throughout the application.
+
+3. **Type Safety**:
+
+   - TypeScript provides type safety, ensuring that each property of the `User` class has a specific data type. This helps prevent errors and enhances code robustness.
+
+4. **Default Values**:
+
+   - Initializing properties with default values ensures that instances of the `User` class have consistent initial states. This can simplify handling of user objects, especially when certain properties may not be present or initialized immediately.
+
+5. **Consistency and Readability**:
+
+   - Using a standardized `User` class structure promotes consistency across the application. Developers can easily understand and work with user-related data, leading to improved code readability and maintainability.
+
+6. **Integration with Backend Services**:
+
+   - When interacting with backend APIs, having a well-defined `User` class facilitates data exchange. For example, you can map JSON responses from API endpoints directly to `User` objects in the frontend code.
+
+7. **Authentication and Authorization**:
+
+   - The `User` class often plays a crucial role in authentication and authorization mechanisms. It stores authentication tokens (`accessToken` and `refreshToken`), user roles, and other relevant information needed for managing user sessions and access control.
+
+8. **Persistence and State Management**:
+   - In applications with client-side state management or data persistence, the `User` class may be used to represent user data stored locally or in browser storage. This allows for seamless retrieval and manipulation of user information across different parts of the application.
+
+Overall, using a `User` class provides structure, consistency, and clarity to user-related data handling in web applications. It helps streamline development efforts, enhance code organization, and improve the overall user experience.
+
+Sure, let's break down the `User` class and provide an explanation along with examples:
+
+```typescript
+export class User {
+  id: number = 0;
+  password: string = "";
+  photo: string = "";
+  email: string = "";
+  role: String = "";
+  accessToken: string = "";
+  refreshToken: string = "";
+  name: string = "";
+  mobile: string = "";
+  companyId: string = "";
+  rememberMe: boolean = false;
+  lastLoginOn: string = "";
+}
+```
+
+1. **Class Definition**:
+
+   - `export class User { ... }`: This line defines a TypeScript class named `User`. The `export` keyword makes the class accessible from outside the file, allowing it to be imported and used in other parts of the application.
+
+2. **Properties**:
+
+   - The class has several properties, each representing different attributes of a user.
+
+   - `id: number = 0;`: Represents the unique identifier of the user. It is initialized with a default value of `0`.
+
+   - `password: string = '';`: Represents the password of the user. It is initialized as an empty string.
+
+   - `photo: string = '';`: Represents the URL or path to the user's profile photo. It is initialized as an empty string.
+
+   - `email: string = '';`: Represents the email address of the user. It is initialized as an empty string.
+
+   - `role: String = '';`: Represents the role or permissions assigned to the user. It is initialized as an empty string.
+
+   - `accessToken: string = '';`: Represents the access token used for authentication and authorization. It is initialized as an empty string.
+
+   - `refreshToken: string = '';`: Represents the refresh token used for token refreshing. It is initialized as an empty string.
+
+   - `name: string = '';`: Represents the name or full name of the user. It is initialized as an empty string.
+
+   - `mobile: string = '';`: Represents the mobile number of the user. It is initialized as an empty string.
+
+   - `companyId: string = '';`: Represents the ID of the company associated with the user. It is initialized as an empty string.
+
+   - `rememberMe: boolean = false;`: Represents whether the user has chosen to be remembered for future logins. It is initialized as `false`.
+
+   - `lastLoginOn: string = '';`: Represents the date and time of the user's last login. It is initialized as an empty string.
+
+3. **Example**:
+
+```typescript
+// Creating a new user object
+const user = new User();
+
+// Assigning values to properties
+user.id = 1;
+user.email = "example@example.com";
+user.name = "John Doe";
+user.role = "admin";
+user.accessToken = "abc123xyz";
+user.rememberMe = true;
+
+// Logging user object
+console.log(user);
+```
+
+In this example, we create a new `User` object, assign values to its properties, and then log the user object to the console. This demonstrates how the `User` class can be used to represent user data in an Angular application.

@@ -1,0 +1,82 @@
+##Angualr Setups For Project
+
+Installtion For Anguler Gudies
+
+Sure, here's a step-by-step guide to installing Angular:
+
+1. **Install Node.js and npm**:
+
+   - Angular requires Node.js and npm (Node Package Manager) to be installed on your system. You can download and install them from the [Node.js official website](https://nodejs.org/).
+
+2. **Install Angular CLI**:
+
+   - Angular CLI (Command Line Interface) is a powerful tool to initialize, develop, scaffold, and maintain Angular applications. You can install it globally using npm. Open your terminal or command prompt and run the following command:
+     ```
+     npm install -g @angular/cli
+     ```
+
+3. **Create a New Angular Project**:
+
+   - Once Angular CLI is installed, you can use it to create a new Angular project. Navigate to the directory where you want to create your project and run:
+     ```
+     ng new my-angular-app
+     ```
+     Replace `my-angular-app` with your preferred project name.
+
+4. **Navigate to the Project Directory**:
+
+   - After creating the project, navigate into the project directory:
+     ```
+     cd my-angular-app
+     ```
+
+5. **Run the Application**:
+
+   - Now that you're inside the project directory, you can run your Angular application using the Angular CLI's `serve` command. This command compiles the application and starts a development server. Run:
+     ```
+     ng serve
+     ```
+     Your Angular application will be served at `http://localhost:4200/` by default.
+
+6. **Access the Application**:
+   - Open your web browser and navigate to `http://localhost:4200/`. You should see your Angular application running.
+
+That's it! You have successfully installed Angular and created a new Angular project. You can start building your application by modifying the files in the project directory. Refer to the [Angular documentation](https://angular.io/docs) for more detailed information on how to develop Angular applications.
+
+##### Any Specif Version Downloaded Angular
+
+Certainly! If you want to install a specific version of Angular, you can specify the version when creating a new Angular project using Angular CLI.
+
+Here's how you can do it:
+
+1. **Install Angular CLI** (if you haven't already):
+
+   ```
+   npm install -g @angular/cli
+   ```
+
+2. **Create a New Angular Project with a Specific Version**:
+   You can specify the version of Angular while creating a new project using Angular CLI. For example, if you want to create a project with Angular version 12, you can run:
+
+   ```
+   ng new my-angular-app --strict --version 12
+   ```
+
+   Replace `my-angular-app` with your preferred project name.
+
+   The `--strict` flag enables strict mode, which helps catch common errors early in the development process.
+
+   If you don't specify a version, Angular CLI will install the latest stable version by default.
+
+3. **Navigate to the Project Directory**:
+
+   ```
+   cd my-angular-app
+   ```
+
+4. **Run the Application**:
+   ```
+   ng serve
+   ```
+
+By following these steps, you'll create a new Angular project with the specified version and can start working on it as usual.

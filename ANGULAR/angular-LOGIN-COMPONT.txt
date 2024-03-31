@@ -1,0 +1,155 @@
+Sure, let's break down the provided code line by line:
+
+1. **Component and Module Imports**:
+   ```typescript
+   import { Component, OnInit } from '@angular/core';
+   import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+   import { ActivatedRoute, Router } from '@angular/router';
+   import { ToastrService } from 'ngx-toastr';
+   import { first } from 'rxjs/operators';
+
+   // Login Auth
+   import { AuthenticationService } from '../../core/services/auth.service';
+   ```
+
+   - These lines import required Angular modules and services:
+     - `Component`, `OnInit`: Angular component and lifecycle hook interfaces.
+     - `FormBuilder`, `FormGroup`, `Validators`: Classes for building and validating forms.
+     - `ActivatedRoute`, `Router`: Services for routing and accessing route parameters.
+     - `ToastrService`: Service for displaying toast notifications.
+     - `first`: Operator from RxJS used to take the first emitted value from an observable.
+     - `AuthenticationService`: Custom service for authentication logic.
+
+2. **Component Decorator**:
+   ```typescript
+   @Component({
+     selector: 'app-login',
+     templateUrl: './login.component.html',
+     styleUrls: ['./login.component.scss']
+   })
+   ```
+
+   - Defines the metadata for the component:
+     - `selector`: Specifies the HTML selector for embedding this component's view.
+     - `templateUrl`: Path to the HTML template file for this component.
+     - `styleUrls`: Array of paths to stylesheet files for styling this component.
+
+3. **Component Class Definition**:
+   ```typescript
+   export class LoginComponent implements OnInit {
+   ```
+
+   - Defines the `LoginComponent` class and indicates that it implements the `OnInit` interface.
+
+4. **Component Properties**:
+   ```typescript
+   loginForm!: FormGroup;
+   submitted = false;
+   fieldTextType!: boolean;
+   error = '';
+   returnUrl!: string;
+   email: any = '';
+   password: any = '';
+   rememberMe: any = '';
+   year: number = new Date().getFullYear();
+   ```
+
+   - Declares various properties used within the component, such as form controls, submission status, error messages, and input values.
+
+5. **Constructor**:
+   ```typescript
+   constructor(
+     private formBuilder: FormBuilder,
+     private authenticationService: AuthenticationService,
+     private router: Router,
+     private route: ActivatedRoute,
+     public toastr: ToastrService
+   ) { ... }
+   ```
+
+   - Initializes class dependencies via constructor injection, including form builder, authentication service, router, route, and toastr service.
+
+6. **ngOnInit() Lifecycle Hook**:
+   ```typescript
+   ngOnInit(): void {
+     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+   }
+   ```
+
+   - Implements the `OnInit` lifecycle hook to initialize component properties when instantiated.
+   - Sets the `returnUrl` property based on query parameters or defaults to `'/'`.
+
+7. **Form Submission Handler**:
+   ```typescript
+   onSubmit() {
+     // Form submission logic
+   }
+   ```
+
+   - Defines the method for handling form submission:
+     - Validates form inputs.
+     - Calls the `login()` method from the authentication service.
+     - Handles login success or failure by displaying toast messages.
+
+8. **Toggle Password Visibility Method**:
+   ```typescript
+   toggleFieldTextType() {
+     // Toggles password visibility
+   }
+   ```
+
+   - Defines a method to toggle the visibility of the password field between plain text and masked text.
+
+
+   ##e login Logic 
+
+   This block of code is responsible for handling the submission of a login form. Let's break it down:
+
+1. **Form Input Validation**:
+   ```typescript
+   if (this.email !== '' && this.password !== '') {
+   ```
+
+   - This condition checks if both the email and password fields are not empty.
+
+2. **Email Format Validation**:
+   ```typescript
+   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+   if (re.test(this.email) == false) {
+     this.toastr.error("Enter a valid Email");
+   } else {
+   ```
+
+   - This segment verifies if the entered email address matches the specified regular expression pattern for email validation.
+   - If the email format is invalid, it displays an error message using the ToastrService.
+
+3. **Login Authentication**:
+   ```typescript
+   this.authenticationService.login(this.email, this.password).pipe(first()).subscribe(data => {
+   ```
+
+   - If the email format is valid, it calls the `login()` method from the `AuthenticationService` to attempt user authentication with the provided email and password.
+   - It utilizes RxJS `pipe()` and `first()` operators to ensure that only the first emitted value is subscribed to.
+   - Upon successful authentication, it stores the user's email in local storage if the "remember me" option is checked and redirects to the returnUrl.
+   - If authentication fails, it catches the error and displays it using the ToastrService.
+
+4. **Error Handling**:
+   ```typescript
+   error => {
+     console.log(error)
+     this.toastr.error(error.message);
+   });
+   ```
+
+   - In case of any errors during the authentication process, it logs the error to the console and displays an error message using the ToastrService.
+
+5. **Empty Field Handling**:
+   ```typescript
+   } else {
+     this.toastr.error("Enter Email and Password");
+   }
+   ```
+
+   - If either the email or password field is empty, it displays an error message prompting the user to enter both credentials.
+
+Overall, this code block ensures that the login form is properly validated, user authentication is attempted with valid credentials, and appropriate error messages are displayed to the user as necessary.

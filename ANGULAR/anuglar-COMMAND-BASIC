@@ -1,0 +1,73 @@
+Sure, let's go through each Angular CLI command and explain its purpose:
+
+### 1. `ng new [project-name]`:
+   - **Purpose**: Creates a new Angular project with the specified name.
+   - **Usage**: `ng new my-project`
+   - **Explanation**: This command generates a new Angular project structure with all necessary files and configurations.
+
+### 2. `ng serve`:
+   - **Purpose**: Builds and serves the Angular application locally.
+   - **Usage**: `ng serve`
+   - **Explanation**: It compiles the application, starts a local development server, and watches for changes in source files. Whenever changes are made, it automatically reloads the application.
+
+### 3. `ng generate [schematic] [name]` (or shorthand: `ng g`):
+   - **Purpose**: Generates different parts of the Angular application like components, services, modules, etc.
+   - **Usage**: `ng generate component my-component`
+   - **Explanation**: This command creates files for a new component (or other schematics) with the specified name and updates the necessary module and component files accordingly.
+
+### 4. `ng build`:
+   - **Purpose**: Builds the Angular application for production.
+   - **Usage**: `ng build`
+   - **Explanation**: It compiles the application and generates optimized bundles ready for deployment. The output is stored in the `dist/` directory by default.
+
+### 5. `ng test`:
+   - **Purpose**: Runs unit tests using Karma and Jasmine for the Angular application.
+   - **Usage**: `ng test`
+   - **Explanation**: This command executes all unit tests in the application and provides feedback on their success or failure.
+
+### 6. `ng e2e`:
+   - **Purpose**: Runs end-to-end tests using Protractor for the Angular application.
+   - **Usage**: `ng e2e`
+   - **Explanation**: It executes end-to-end tests to simulate user interactions with the application and checks for expected behavior.
+
+### 7. `ng lint`:
+   - **Purpose**: Lints the Angular application code using TSLint or ESLint.
+   - **Usage**: `ng lint`
+   - **Explanation**: This command analyzes the application's codebase for potential errors, coding style violations, and best practices adherence.
+
+### 8. `ng update`:
+   - **Purpose**: Updates the Angular dependencies to the latest versions.
+   - **Usage**: `ng update`
+   - **Explanation**: It checks for updates to Angular dependencies and applies them to the project, ensuring compatibility with the latest Angular version and related libraries.
+
+### 9. `ng add`:
+   - **Purpose**: Adds new capabilities to the Angular project by installing additional libraries or packages.
+   - **Usage**: `ng add @angular/material`
+   - **Explanation**: This command installs and configures third-party libraries or Angular schematics into the project.
+
+### 10. `ng deploy`:
+   - **Purpose**: Deploys the Angular application to a hosting provider like Firebase, GitHub Pages, or Azure.
+   - **Usage**: `ng deploy`
+   - **Explanation**: It packages the application for deployment and uploads it to the specified hosting provider, making the application accessible online.
+
+### 11. `ng serve --port [port-number]`:
+   - **Purpose**: Serves the Angular application on a specific port number.
+   - **Usage**: `ng serve --port 4201`
+   - **Explanation**: This command starts the development server on the specified port number, allowing developers to run multiple Angular applications simultaneously.
+
+### 12. `ng build --prod`:
+   - **Purpose**: Builds the Angular application for production with optimizations like minification, ahead-of-time compilation, etc.
+   - **Usage**: `ng build --prod`
+   - **Explanation**: It compiles the application with production optimizations, resulting in smaller bundle sizes and improved performance.
+
+### 13. `ng config`:
+   - **Purpose**: Configures Angular CLI settings like default project, package manager, etc.
+   - **Usage**: `ng config set <setting> <value>`
+   - **Explanation**: This command allows developers to modify Angular CLI configuration settings such as default project, package manager, etc.
+
+### 14. `ng help`:
+   - **Purpose**: Displays a list of Angular CLI commands and their descriptions.
+   - **Usage**: `ng help`
+   - **Explanation**: It provides detailed information about available Angular CLI commands, their usage, and options.
+
+These are some of the most commonly used Angular CLI commands that developers utilize during Angular application development. They facilitate various tasks such as project initialization, development, testing, deployment, and maintenance.

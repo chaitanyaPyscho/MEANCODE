@@ -1,0 +1,52 @@
+This `EventService` class provides a simple event broadcasting and subscription mechanism using RxJS.
+
+Here's a breakdown of the code:
+
+1. **Imports**:
+   ```typescript
+   import { Injectable } from '@angular/core';
+   import { Subject, Subscription } from 'rxjs';
+   import { map, filter } from 'rxjs/operators';
+   ```
+   - Importing necessary modules from Angular core and RxJS library.
+
+2. **Interface**:
+   ```typescript
+   interface Event {
+       type: string;
+       payload?: any;
+   }
+   ```
+   - Defines an `Event` interface with two properties:
+     - `type`: A string representing the type of the event.
+     - `payload`: An optional payload containing additional data for the event.
+
+3. **Type Declaration**:
+   ```typescript
+   type EventCallback = (payload: any) => void;
+   ```
+   - Declares a custom type `EventCallback` which represents a function that takes a payload as input and returns void.
+
+4. **Injectable Decorator**:
+   ```typescript
+   @Injectable({
+       providedIn: 'root'
+   })
+   ```
+   - Marks the `EventService` class as an injectable service provided at the root level.
+
+5. **EventService Class**:
+   - **Properties**:
+     - `handler`: A `Subject` instance used to handle events. It's a subject because it can act as both an observable and an observer, allowing other parts of the application to subscribe to events and emit new events.
+   - **Constructor**:
+     - Initializes the `handler` as a new `Subject` instance.
+   - **Methods**:
+     - **`broadcast(type: string, payload = {})`**: 
+       - Broadcasts an event of the specified type with an optional payload.
+       - It calls `next()` on the `handler` subject with an object containing the event type and payload.
+     - **`subscribe(type: string, callback: EventCallback): Subscription`**: 
+       - Subscribes to events of a specific type.
+       - It uses RxJS operators `filter()` and `map()` to filter and transform events based on their type.
+       - Returns a subscription object that allows unsubscribing from the event later if needed.
+
+In summary, the `EventService` provides methods to broadcast events (`broadcast`) and subscribe to specific event types (`subscribe`). It encapsulates event handling logic and provides a simple way to implement event-driven communication within an Angular application using RxJS.

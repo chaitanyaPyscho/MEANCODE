@@ -1,0 +1,94 @@
+The provided code is an example of an HTTP interceptor in Angular, specifically a JWT interceptor. Interceptors are a powerful feature in Angular's HTTP client module (`@angular/common/http`) that allow you to intercept HTTP requests and responses. Here's why this interceptor is used:
+
+1. **Authentication**: 
+   - The interceptor is used to automatically attach a JSON Web Token (JWT) to outgoing HTTP requests.
+   - JWTs are commonly used for authentication and authorization in web applications. By attaching the JWT to each request, the server can verify the user's identity and grant access to protected resources.
+
+2. **Centralized Logic**:
+   - Interceptors provide a centralized location for implementing cross-cutting concerns, such as authentication, logging, error handling, and more.
+   - In this case, the interceptor ensures that authentication logic (adding the JWT token) is applied to every outgoing HTTP request without duplicating code across multiple components or services.
+
+3. **Security**:
+   - By automatically adding the JWT to outgoing requests, the interceptor helps enforce security measures.
+   - Without the interceptor, developers would need to manually attach the JWT to each HTTP request made from different parts of the application. This could lead to oversight and potential security vulnerabilities if authentication logic is omitted or inconsistently applied.
+
+4. **Cleaner Code**:
+   - Using an interceptor simplifies the code in components and services that make HTTP requests.
+   - Developers don't need to worry about handling authentication details within individual components. Instead, the interceptor takes care of it transparently.
+
+5. **Flexibility**:
+   - Interceptors offer flexibility to modify or manipulate HTTP requests and responses as needed.
+   - Developers can easily extend or modify the interceptor to include additional functionality, such as refreshing tokens, handling errors, or logging requests and responses.
+
+In summary, the provided interceptor enhances the security and maintainability of the Angular application by automatically adding JWT tokens to outgoing HTTP requests, centralizing authentication logic, and ensuring consistent security measures across the application.
+
+
+
+
+Let's break down the provided code step by step:
+
+1. **Imports**:
+   
+```typescript
+import { Injectable } from '@angular/core';
+import {
+    HttpRequest,
+    HttpHandler,
+    HttpEvent,
+    HttpInterceptor,
+} from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import { AuthenticationService } from '../services/auth.service';
+
+import { environment } from '../../../environments/environment';
+```
+
+- These are import statements for required Angular modules and services.
+- `Injectable`, `HttpRequest`, `HttpHandler`, `HttpEvent`, and `HttpInterceptor` are all part of Angular's HTTP client module (`@angular/common/http`).
+- `Observable` is imported from the RxJS library for handling asynchronous data streams.
+- `AuthenticationService` is imported from a custom service file.
+- `environment` is imported to access environment variables.
+
+2. **Injectable Decorator**:
+
+```typescript
+@Injectable()
+```
+
+- `@Injectable()` is a decorator that marks the class as an injectable service. This allows Angular to provide it to other parts of the application through dependency injection.
+
+3. **Constructor**:
+
+```typescript
+constructor(
+    private authenticationService: AuthenticationService
+) { }
+```
+
+- The constructor injects the `AuthenticationService` dependency, allowing the interceptor to access authentication details.
+
+4. **Intercept Method**:
+
+```typescript
+intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    let currentUser = this.authenticationService.currentUserValue;
+    if (currentUser && currentUser.accessToken) {
+        request = request.clone({
+            setHeaders: {
+              'x-access-token': currentUser.accessToken
+            }
+        });
+    }
+    return next.handle(request);
+}
+```
+
+- The `intercept()` method is implemented as part of the `HttpInterceptor` interface.
+- It takes two parameters: `request` (the intercepted HTTP request) and `next` (a `HttpHandler` for the next interceptor in the chain or the backend if there are no more interceptors).
+- Inside the method, it retrieves the current user's authentication details from the `AuthenticationService`.
+- If a user is logged in and has an access token (`currentUser.accessToken`), it clones the request and adds the token to the request headers using `request.clone()`.
+- The modified request is then passed to the next handler using `next.handle(request)`.
+- Finally, the method returns an observable of type `HttpEvent<any>`, indicating that the interceptor is handling the request and response.
+
+Overall, this interceptor intercepts outgoing HTTP requests, checks if the user is logged in, and if so, adds the access token to the request headers. This ensures that authenticated requests include the necessary authentication token for server-side validation.

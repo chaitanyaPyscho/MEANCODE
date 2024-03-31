@@ -1,0 +1,62 @@
+### PIPE FIRST() METHOD
+
+Certainly! Let's break down the use of `pipe(first())` with an example:
+
+Suppose you have an observable that emits a sequence of numbers asynchronously, but you're only interested in the first emitted number. You can use `pipe(first())` to ensure that you only receive the first emitted value and then complete the observable stream. Here's how you can achieve this:
+
+```typescript
+import { of } from "rxjs";
+import { first } from "rxjs/operators";
+
+// Create an observable that emits numbers asynchronously
+const numbersObservable = of(1, 2, 3, 4, 5);
+
+// Apply the first operator using pipe
+numbersObservable.pipe(first()).subscribe(
+  (value) => {
+    console.log("First value emitted:", value);
+  },
+  (error) => {
+    console.error("Error:", error);
+  },
+  () => {
+    console.log("Observable completed after the first value.");
+  }
+);
+```
+
+In this example:
+
+1. We import the `of` function from RxJS to create an observable that emits a sequence of numbers (1, 2, 3, 4, 5).
+
+2. We import the `first` operator from RxJS operators.
+
+3. We apply the `first` operator to the `numbersObservable` using `pipe(first())`. This ensures that only the first emitted value will be processed, and then the observable will complete.
+
+4. We subscribe to the modified observable. In the subscription, we provide three callback functions: one to handle emitted values, one to handle errors, and one to handle the completion of the observable.
+
+5. When the observable emits its first value, it logs "First value emitted: [value]" to the console.
+
+6. If there's an error during emission, it logs the error.
+
+7. After emitting the first value, the observable completes, and it logs "Observable completed after the first value." to the console.
+
+This example demonstrates how `pipe(first())` ensures that you only receive the first emitted value from the observable and then complete the observable stream.
+
+### OUTPUT
+
+Certainly! Here's the output you would get when running the provided example:
+
+```
+First value emitted: 1
+Observable completed after the first value.
+```
+
+Explanation:
+
+- The observable emits the first value, which is 1.
+- The subscription's next handler logs "First value emitted: 1" to the console.
+- As soon as the first value is emitted, the observable completes.
+- The completion handler logs "Observable completed after the first value." to the console.
+
+This demonstrates that `pipe(first())` ensures that only the first emitted value is processed, and then the observable completes, as expected.

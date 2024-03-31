@@ -1,0 +1,188 @@
+Let's break down the provided Angular code for the ContactsComponent step by step:
+
+### Imports:
+```typescript
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { AppComponent } from 'src/app/app.component';
+import { ApiService } from 'src/app/core/services/api.service';
+import { AuthenticationService } from 'src/app/core/services/auth.service';
+import { environment } from 'src/environments/environment';
+import { Location } from "./location";
+```
+Explanation:
+- We import necessary Angular modules and services like Component, OnInit, ViewChild, Title, Router, etc.
+- We import third-party libraries like ToastrService for displaying notifications and Location for managing location data.
+- We import custom services like ApiService and AuthenticationService.
+- We also import environment variables for managing different environment configurations.
+
+### Component Definition:
+```typescript
+@Component({
+  selector: 'app-contacts',
+  templateUrl: './contacts.component.html',
+  styleUrls: ['./contacts.component.scss']
+})
+```
+Explanation:
+- We define the ContactsComponent with a selector 'app-contacts'.
+- We specify the template and style files for the component.
+
+### Class Declaration and Initialization:
+```typescript
+export class ContactsComponent implements OnInit {
+  // Component properties
+}
+```
+Explanation:
+- We declare the ContactsComponent class and implement the OnInit lifecycle hook.
+- We define various properties like myLocation, stateList, cityList, dataTable, etc., to manage component data and state.
+
+### Constructor and ngOnInit():
+```typescript
+constructor(
+  private api: ApiService,
+  private toast: ToastrService,
+  public authS: AuthenticationService,
+  public router: Router,
+  public title: Title,
+  public appC: AppComponent
+) {}
+
+ngOnInit(): void {
+  // Component initialization logic
+}
+```
+Explanation:
+- We inject ApiService, ToastrService, AuthenticationService, Router, Title, and AppComponent into the constructor for accessing services and functionalities.
+- We initialize the component in the ngOnInit lifecycle hook, setting up initial data and fetching necessary resources.
+
+### Component Methods:
+```typescript
+edit(i: any) { /* Method implementation */ }
+
+private _fetchData() { /* Method implementation */ }
+
+clearFilter() { /* Method implementation */ }
+
+submit() { /* Method implementation */ }
+
+delete(i: any) { /* Method implementation */ }
+```
+Explanation:
+- We define various component methods like edit(), _fetchData(), clearFilter(), submit(), and delete () to handle different functionalities such as editing, fetching data, clearing filters, submitting form data, and deleting contacts.
+
+### Additional Component Properties:
+```typescript
+// Additional properties
+```
+Explanation:
+- We define additional properties like loader, searchTerm, name, mobile, address, area, etc., to manage component state and form data.
+
+### Component HTML Template:
+```html
+<app-breadcrumb [items]="breadCrumbItems"></app-breadcrumb>
+<!-- HTML template code -->
+```
+Explanation:
+- We define the HTML template for the ContactsComponent, including Angular directives like app - breadcrumb for displaying breadcrumb navigation.
+- We bind component properties and methods to the template for dynamic rendering and user interaction.
+
+This breakdown explains each part of the provided Angular code for the ContactsComponent, including imports, component definition, class declaration, lifecycle hooks, methods, properties, and HTML template.
+
+
+
+
+
+
+
+    Let's break down the provided code snippet step by step:
+
+### 1. `getCities(event:any)` method:
+```typescript
+getCities(event: any) {
+  let area = this.areas.filter((res: any) => res.name == event)[0]._id;
+  this.api.getAllCity({ area: area }).subscribe(data => {
+    this.cities = data.data
+  });
+}
+```
+Explanation:
+- This method is triggered when a selection event occurs, typically associated with a dropdown or selection input for areas.
+- It filters the`this.areas` array based on the selected area's name and retrieves the `_id` of the matching area.
+    - It then calls `api.getAllCity()` with the selected area's `_id` to fetch the cities associated with that area.
+        - Once the data is received from the API, it updates the `this.cities` array with the fetched city data.
+
+### 2. `getStates(event:any)` method:
+```typescript
+getStates(event: any) {
+  let city = this.cities.filter((res: any) => res.name == event)[0]._id;
+  this.api.getAllState({ city: city }).subscribe(data => {
+    this.states = data.data
+  });
+}
+```
+Explanation:
+- This method is triggered when a selection event occurs, typically associated with a dropdown or selection input for cities.
+- It filters the`this.cities` array based on the selected city's name and retrieves the `_id` of the matching city.
+    - It then calls `api.getAllState()` with the selected city's `_id` to fetch the states associated with that city.
+        - Once the data is received from the API, it updates the `this.states` array with the fetched state data.
+
+### 3. `edit(i:any)` method:
+```typescript
+edit(i: any) {
+  this.create = true;
+  this.editS = true;
+  this.name = this.data[i].name;
+  this.address = this.data[i].address;
+  this.mobile = this.data[i].mobile;
+  this.area = this.data[i].area;
+  this.city = this.data[i].city;
+  this.district = this.data[i].district;
+  this.state = this.data[i].state;
+  this.pin = this.data[i].pin;
+  this.contactId = this.data[i]._id;
+}
+```
+Explanation:
+- This method is called when an edit action is initiated, usually when editing a contact.
+- It sets flags `create` and `editS` to true to indicate that the editing mode is active.
+- It retrieves the details of the contact to be edited from the `this.data` array based on the provided index`i`.
+- It assigns the retrieved contact details to respective properties for editing.
+- It also sets the `contactId` property to the `_id` of the contact being edited.
+
+### 4. `private _fetchData()` method:
+```typescript
+private _fetchData() {
+  this.data = [];
+  const fdata = JSON.stringify({
+    "condition": {}
+  });
+  this.api.getAllContacts(fdata).subscribe(data => {
+    this.data = data.data;
+    setTimeout(() => {
+      this.dataTable = $(this.table.nativeElement);
+      this.dataTable.DataTable({
+        "searching": false,
+        "lengthChange": false,
+        "info": false
+      });
+    }, 500);
+  }, error => {
+    this.toast.error(error.message);
+    this.loader = false;
+  });
+}
+```
+Explanation:
+- This method is responsible for fetching data, typically contacts, from the API.
+- It clears the `this.data` array to ensure a fresh data fetch.
+- It constructs a JSON object `fdata` to specify any conditions for data retrieval(usually empty in this case).
+- It calls the API service method `api.getAllContacts()` with the constructed data object.
+- Upon receiving the data from the API, it updates the `this.data` array with the fetched contact data.
+- It initializes a DataTable component using jQuery to render the data table with specific options like disabling search, length change, and info display.
+- It also handles any errors that occur during the data fetch, displaying an error toast message and updating the `loader` flag accordingly.
+
+These methods are essential parts of managing contacts in an Angular application, handling data fetching, filtering, editing, and rendering.

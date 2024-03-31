@@ -1,0 +1,36 @@
+Certainly! Here's a simplified introduction to the folder structure and files in an Angular application:
+
+1. **src Folder**:
+
+   - This is the main folder where your Angular application code resides.
+   - **app Folder**:
+     - Contains all your application's components, modules, services, and other related files.
+   - **assets Folder**:
+     - Used for storing static files like images, fonts, and configuration files.
+   - **environments Folder**:
+     - Contains configuration files for different environments such as 'development' and 'production'.
+
+2. **angular.json File**:
+
+   - This file is the Angular project configuration file where you define various settings and options for building and serving your application.
+
+3. **index.html File**:
+
+   - This is the HTML entry point of your Angular application.
+
+4. **app.module.ts File**:
+
+   - The root module of your Angular application where you import and declare all the components, directives, and services.
+
+5. **main.ts File**:
+
+   - The main TypeScript file that bootstraps your Angular application.
+
+6. **styles.css File**:
+
+   - This is the global stylesheet file for your application.
+
+7. **package.json File**:
+   - This file contains metadata about your project and lists all the dependencies required for your application.
+
+This structure provides a basic foundation for organizing and building Angular applications. As your project grows, you may customize this structure further to suit your specific requirements.
