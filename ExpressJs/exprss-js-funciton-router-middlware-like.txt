@@ -1,0 +1,99 @@
+Sure, let's explore some more functions and concepts in Express.js with code examples:
+
+1. **Middleware Functions:**
+   Middleware functions are functions that have access to the request object (`req`), the response object (`res`), and the next middleware function in the application's request-response cycle.
+
+   ```javascript
+   // Example middleware function
+   function logger(req, res, next) {
+       console.log('Logging...');
+       next(); // Pass control to the next middleware function
+   }
+
+   // Using middleware
+   app.use(logger);
+   ```
+
+2. **Route Parameters:**
+   You can define routes with parameters, which can be accessed using `req.params`.
+
+   ```javascript
+   // Route with parameter
+   app.get('/users/:userId', (req, res) => {
+       res.send(`User ID: ${req.params.userId}`);
+   });
+   ```
+
+3. **Query Parameters:**
+   Query parameters can be accessed using `req.query`.
+
+   ```javascript
+   // Route with query parameter
+   app.get('/search', (req, res) => {
+       const query = req.query.q;
+       res.send(`Search Query: ${query}`);
+   });
+   ```
+
+4. **Route Handlers:**
+   You can define separate handler functions and pass them to route methods.
+
+   ```javascript
+   // Route handler function
+   function getUsers(req, res) {
+       // Logic to get users
+       res.send('List of users');
+   }
+
+   // Using route handler function
+   app.get('/users', getUsers);
+   ```
+
+5. **Response Methods:**
+   Express provides various methods to send responses.
+
+   ```javascript
+   // Sending JSON response
+   app.get('/data', (req, res) => {
+       res.json({ message: 'Hello, JSON!' });
+   });
+
+   // Sending HTML response
+   app.get('/html', (req, res) => {
+       res.send('<h1>Hello, HTML!</h1>');
+   });
+   ```
+
+6. **Chaining Route Handlers:**
+   You can chain multiple route handlers together.
+
+   ```javascript
+   app.get('/example', 
+       (req, res, next) => {
+           // Middleware logic
+           next();
+       },
+       (req, res) => {
+           // Route handler logic
+           res.send('Example route');
+       }
+   );
+   ```
+
+7. **Router:**
+   Express Router allows you to group routes.
+
+   ```javascript
+   // Create a new router
+   const router = express.Router();
+
+   // Define routes using the router
+   router.get('/', (req, res) => {
+       res.send('Router Home');
+   });
+
+   // Mount the router at a specific path
+   app.use('/api', router);
+   ```
+
+These are some additional functions and concepts in Express.js that you can use to build powerful web applications and APIs.

@@ -1,0 +1,150 @@
+MongoDB provides a rich set of functions and methods for querying, updating, and manipulating data. Here are some additional functions and methods along with code examples:
+
+1. **count()**: Counts the number of documents that match a query.
+   ```javascript
+   db.users.count({ age: { $gt: 25 } });
+   ```
+
+2. **distinct()**: Finds the distinct values for a specified field across a collection.
+   ```javascript
+   db.users.distinct("city");
+   ```
+
+3. **sort()**: Sorts the documents in a collection based on the specified criteria.
+   ```javascript
+   db.users.find().sort({ age: 1 }); // Ascending order
+   ```
+
+4. **limit()**: Limits the number of documents returned in a query result.
+   ```javascript
+   db.users.find().limit(10);
+   ```
+
+5. **skip()**: Skips a specified number of documents in a query result.
+   ```javascript
+   db.users.find().skip(5);
+   ```
+
+6. **update()**: Updates documents that match a specified filter.
+   ```javascript
+   db.users.update({ name: "Alice" }, { $set: { age: 31 } });
+   ```
+
+7. **replaceOne()**: Replaces a single document that matches a specified filter.
+   ```javascript
+   db.users.replaceOne({ name: "Bob" }, { name: "Bobby", age: 26 });
+   ```
+
+8. **findOneAndUpdate()**: Finds a single document and updates it atomically.
+   ```javascript
+   db.users.findOneAndUpdate({ name: "Charlie" }, { $set: { status: "active" } });
+   ```
+
+9. **findOneAndReplace()**: Finds a single document and replaces it atomically.
+   ```javascript
+   db.users.findOneAndReplace({ name: "David" }, { name: "Dav", age: 30 });
+   ```
+
+10. **findOneAndDelete()**: Finds a single document and deletes it atomically.
+    ```javascript
+    db.users.findOneAndDelete({ name: "Eve" });
+    ```
+
+11. **$set**: Updates the value of a field in a document.
+    ```javascript
+    db.users.updateOne({ name: "Frank" }, { $set: { age: 35 } });
+    ```
+
+12. **$inc**: Increments the value of a field in a document.
+    ```javascript
+    db.users.updateOne({ name: "Gina" }, { $inc: { age: 1 } });
+    ```
+
+13. **$push**: Adds an element to an array field in a document.
+    ```javascript
+    db.users.updateOne({ name: "Harry" }, { $push: { hobbies: "reading" } });
+    ```
+
+14. **$pull**: Removes an element from an array field in a document.
+    ```javascript
+    db.users.updateOne({ name: "Harry" }, { $pull: { hobbies: "reading" } });
+    ```
+
+15. **$addToSet**: Adds an element to an array field if it doesn't already exist.
+    ```javascript
+    db.users.updateOne({ name: "Harry" }, { $addToSet: { hobbies: "writing" } });
+    ```
+
+These functions and methods expand the capabilities of MongoDB queries and updates, allowing for more precise control over data manipulation and retrieval. Experimenting with these functions and methods will help you become more proficient in working with MongoDB.
+
+
+
+
+Certainly! Here are some more functions and methods commonly used in MongoDB:
+
+16. **$unset**: Removes a field from a document.
+    ```javascript
+    db.users.updateOne({ name: "Alice" }, { $unset: { age: "" } });
+    ```
+
+17. **$rename**: Renames a field in a document.
+    ```javascript
+    db.users.updateOne({ name: "Bob" }, { $rename: { "age": "yearsOld" } });
+    ```
+
+18. **$min**: Updates a field in a document if the specified value is lower than the existing value.
+    ```javascript
+    db.stats.updateOne({ type: "score" }, { $min: { highScore: 90 } });
+    ```
+
+19. **$max**: Updates a field in a document if the specified value is higher than the existing value.
+    ```javascript
+    db.stats.updateOne({ type: "score" }, { $max: { highScore: 95 } });
+    ```
+
+20. **$addToSet with $each**: Adds multiple elements to an array field if they don't already exist.
+    ```javascript
+    db.users.updateOne({ name: "Harry" }, { $addToSet: { hobbies: { $each: ["swimming", "cooking"] } } });
+    ```
+
+21. **$pullAll**: Removes multiple elements from an array field in a document.
+    ```javascript
+    db.users.updateOne({ name: "Harry" }, { $pullAll: { hobbies: ["swimming", "cooking"] } });
+    ```
+
+22. **$push with $each**: Adds multiple elements to an array field.
+    ```javascript
+    db.users.updateOne({ name: "Harry" }, { $push: { hobbies: { $each: ["coding", "gaming"] } } });
+    ```
+
+23. **$slice**: Limits the number of elements in an array field.
+    ```javascript
+    db.users.updateOne({ name: "Harry" }, { $push: { hobbies: { $each: ["reading", "writing"], $slice: -3 } } });
+    ```
+
+24. **$position**: Specifies the position at which to insert elements in an array field.
+    ```javascript
+    db.users.updateOne({ name: "Harry" }, { $push: { hobbies: { $each: ["reading", "writing"], $position: 0 } } });
+    ```
+
+25. **$pop**: Removes the first or last element from an array field.
+    ```javascript
+    db.users.updateOne({ name: "Harry" }, { $pop: { hobbies: 1 } }); // Removes the last element
+    ```
+
+26. **$addToSet with $each and $sort**: Adds multiple elements to an array field and sorts them.
+    ```javascript
+    db.users.updateOne({ name: "Harry" }, { $addToSet: { hobbies: { $each: ["biking", "running"], $sort: 1 } } });
+    ```
+
+27. **$pull with $in**: Removes elements from an array field that match any of the specified values.
+    ```javascript
+    db.users.updateOne({ name: "Harry" }, { $pull: { hobbies: { $in: ["reading", "writing"] } } });
+    ```
+
+28. **$where**: Performs JavaScript expression evaluation on the server.
+    ```javascript
+    db.users.find({ $where: "this.age > 25" });
+    ```
+
+These functions and methods provide additional flexibility and control when working with MongoDB documents and arrays. Experimenting with these functions will enhance your ability to manipulate and query data effectively in MongoDB.

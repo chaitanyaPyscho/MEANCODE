@@ -1,0 +1,167 @@
+Sure, let's create a Mongoose schema for a `Student` collection with the specified fields, including arrays and objects, and perform basic CRUD operations using Mongoose methods.
+
+First, let's define the Mongoose schema:
+
+```javascript
+const mongoose = require('mongoose');
+
+// Define Student Schema
+const studentSchema = new mongoose.Schema({
+    name: String,
+    lastname: String,
+    email: String,
+    password: String,
+    address: {
+        street: String,
+        city: String,
+        country: String
+    },
+    paccard: [String] // Array of strings (for multiple pac cards)
+});
+
+// Create Student model
+const Student = mongoose.model('Student', studentSchema);
+
+module.exports = Student;
+```
+
+Now, let's perform CRUD operations using Mongoose methods:
+
+1. **Create a new student**:
+
+   ```javascript
+   const Student = require('./studentModel');
+
+   const newStudent = new Student({
+       name: 'John',
+       lastname: 'Doe',
+       email: 'john.doe@example.com',
+       password: 'password123',
+       address: {
+           street: '123 Main St',
+           city: 'New York',
+           country: 'USA'
+       },
+       paccard: ['123456', '789012']
+   });
+
+   newStudent.save()
+       .then(student => {
+           console.log('New student created:', student);
+       })
+       .catch(err => {
+           console.error('Error creating student:', err);
+       });
+   ```
+
+2. **Find a student by email**:
+
+   ```javascript
+   Student.findOne({ email: 'john.doe@example.com' })
+       .then(student => {
+           console.log('Found student by email:', student);
+       })
+       .catch(err => {
+           console.error('Error finding student:', err);
+       });
+   ```
+
+3. **Update a student's address**:
+
+   ```javascript
+   Student.findOneAndUpdate(
+       { email: 'john.doe@example.com' },
+       { address: { street: '456 Oak St', city: 'Los Angeles', country: 'USA' } },
+       { new: true }
+   )
+   .then(updatedStudent => {
+       console.log('Updated student address:', updatedStudent);
+   })
+   .catch(err => {
+       console.error('Error updating student address:', err);
+   });
+   ```
+
+4. **Add a new pac card to a student's record**:
+
+   ```javascript
+   Student.findOneAndUpdate(
+       { email: 'john.doe@example.com' },
+       { $push: { paccard: '345678' } },
+       { new: true }
+   )
+   .then(updatedStudent => {
+       console.log('Updated student with new pac card:', updatedStudent);
+   })
+   .catch(err => {
+       console.error('Error updating student pac card:', err);
+   });
+   ```
+
+5. **Delete a student by email**:
+
+   ```javascript
+   Student.findOneAndDelete({ email: 'john.doe@example.com' })
+       .then(deletedStudent => {
+           console.log('Deleted student:', deletedStudent);
+       })
+       .catch(err => {
+           console.error('Error deleting student:', err);
+       });
+   ```
+
+These examples demonstrate basic CRUD operations using Mongoose methods for the `Student` collection in MongoDB. Adjust the code according to your specific use case and requirements.
+
+
+
+
+####################################################### JOIN USE 
+
+
+Mongoose doesn't support traditional SQL-style joins because MongoDB, the underlying database, is a NoSQL database and does not support joins in the same way as relational databases. However, Mongoose provides a feature called "population" that allows you to reference documents in other collections and "populate" them in queries.
+
+Let's consider an example with two collections: `Student` and `Course`, where each student is enrolled in multiple courses.
+
+First, define the Mongoose schema for both collections:
+
+```javascript
+const mongoose = require('mongoose');
+
+const studentSchema = new mongoose.Schema({
+    name: String,
+    courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }]
+});
+
+const courseSchema = new mongoose.Schema({
+    name: String,
+    description: String
+});
+
+const Student = mongoose.model('Student', studentSchema);
+const Course = mongoose.model('Course', courseSchema);
+
+module.exports = { Student, Course };
+```
+
+In the `Student` schema, we define a field called `courses` which is an array of `ObjectId` references to documents in the `Course` collection.
+
+Now, let's perform a query to find a student and populate their enrolled courses:
+
+```javascript
+const { Student, Course } = require('./models');
+
+// Find a student by ID and populate their courses
+Student.findById(studentId)
+    .populate('courses')
+    .exec((err, student) => {
+        if (err) {
+            console.error('Error finding student:', err);
+            return;
+        }
+        console.log('Student:', student);
+    });
+```
+
+In this example, the `populate('courses')` method tells Mongoose to replace the array of `ObjectId` references in the `courses` field with the actual documents from the `Course` collection. This allows you to retrieve related data from another collection in a single query.
+
+Keep in mind that population in Mongoose is not a traditional SQL join, but it serves a similar purpose by allowing you to fetch related documents from other collections. Adjust the code according to your specific use case and requirements.

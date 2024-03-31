@@ -1,0 +1,98 @@
+
+
+Basic CRUD Operations:
+
+Create: Insert documents into a collection.
+javascript
+Copy code
+db.users.insertOne({ name: "John", age: 30 });
+Read: Retrieve documents from a collection.
+javascript
+Copy code
+db.users.find({ name: "John" });
+Update: Update documents in a collection.
+javascript
+Copy code
+db.users.updateOne({ name: "John" }, { $set: { age: 31 } });
+Delete: Remove documents from a collection.
+javascript
+Copy code
+db.users.deleteOne({ name: "John" });
+Querying Data:
+
+MongoDB supports a rich query language allowing you to filter, sort, and project documents. You can use comparison operators like $gt, $lt, logical operators like $and, $or, and regular expressions with $regex.
+Indexes:
+
+Indexes improve query performance by allowing MongoDB to quickly locate documents. You can create single-field indexes, compound indexes, and text indexes.
+javascript
+Copy code
+db.users.createIndex({ name: 1 }); // Create an index on the 'name' field
+Aggregation Framework:
+
+MongoDB's Aggregation Framework allows for complex data processing tasks like grouping, filtering, sorting, and calculating aggregate values.
+javascript
+Copy code
+db.users.aggregate([
+  { $group: { _id: null, avgAge: { $avg: "$age" } } }
+]);
+Transactions:
+
+MongoDB 4.0 introduced multi-document transactions for replica sets. You can start a transaction, perform operations, and commit or abort the transaction.
+javascript
+Copy code
+const session = db.getMongo().startSession();
+session.startTransaction();
+try {
+  // Perform operations
+  session.commitTransaction();
+} catch (error) {
+  session.abortTransaction();
+  throw error;
+} finally {
+  session.endSession();
+}
+Data Modeling:
+
+MongoDB supports flexible schema design. You can embed documents for one-to-one or one-to-many relationships, or use references for more complex relationships.
+javascript
+Copy code
+// Using Embedded Documents
+db.users.insertOne({
+  name: "John",
+  address: { city: "New York", country: "USA" }
+});
+Geospatial Queries:
+
+MongoDB supports geospatial indexing and querying for location-based data. You can find points within a certain distance or perform other geometric operations.
+javascript
+Copy code
+db.places.find({
+  location: {
+    $near: {
+      $geometry: {
+        type: "Point",
+        coordinates: [longitude, latitude]
+      },
+      $maxDistance: 1000 // in meters
+    }
+  }
+});
+Change Streams:
+
+Change Streams allow applications to subscribe to changes in MongoDB collections in real-time. This enables reactive programming and building real-time applications.
+javascript
+Copy code
+const changeStreamCursor = db.collection.watch();
+changeStreamCursor.on("change", change => {
+  console.log("Change occurred: ", change);
+});
+Sharding and Replication:
+
+Sharding distributes data across multiple servers, while replication provides redundancy by maintaining copies of data. These concepts are crucial for scaling MongoDB horizontally and ensuring high availability.
+Text Search:
+
+MongoDB provides a text search feature allowing you to perform full-text searches on string content. Text indexes can be created on fields to enable efficient text searches.
+javascript
+Copy code
+db.articles.find({ $text: { $search: "mongodb" } });
+These topics cover a wide range of MongoDB features and functionalities, from basic operations to advanced capabilities. By mastering these concepts, you'll be well-equipped to design and build robust MongoDB databases and applications.

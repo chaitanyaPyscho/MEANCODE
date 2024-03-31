@@ -1,0 +1,99 @@
+Creating RESTful APIs with Express.js involves designing routes to handle CRUD (Create, Read, Update, Delete) operations and following RESTful principles such as resource naming conventions and HTTP methods. Let's go through a basic example demonstrating how to design RESTful APIs in Express.js, including handling CRUD operations and versioning APIs:
+
+```javascript
+const express = require('express');
+const app = express();
+const port = 3000;
+
+// Mock data (replace with database integration in a real application)
+let books = [
+    { id: 1, title: 'Book 1', author: 'Author 1' },
+    { id: 2, title: 'Book 2', author: 'Author 2' }
+];
+
+// Middleware for parsing JSON requests
+app.use(express.json());
+
+// Route for getting all books
+app.get('/api/v1/books', (req, res) => {
+    res.json(books);
+});
+
+// Route for getting a single book by ID
+app.get('/api/v1/books/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const book = books.find(book => book.id === id);
+    if (!book) {
+        return res.status(404).json({ message: 'Book not found' });
+    }
+    res.json(book);
+});
+
+// Route for creating a new book
+app.post('/api/v1/books', (req, res) => {
+    const { title, author } = req.body;
+    const id = books.length + 1;
+    const newBook = { id, title, author };
+    books.push(newBook);
+    res.status(201).json(newBook);
+});
+
+// Route for updating an existing book
+app.put('/api/v1/books/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const { title, author } = req.body;
+    const index = books.findIndex(book => book.id === id);
+    if (index === -1) {
+        return res.status(404).json({ message: 'Book not found' });
+    }
+    books[index] = { id, title, author };
+    res.json(books[index]);
+});
+
+// Route for deleting a book by ID
+app.delete('/api/v1/books/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const index = books.findIndex(book => book.id === id);
+    if (index === -1) {
+        return res.status(404).json({ message: 'Book not found' });
+    }
+    books.splice(index, 1);
+    res.json({ message: 'Book deleted successfully' });
+});
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
+```
+
+### Explanation:
+
+1. **Set Up Express App:**
+   - We create an instance of the Express application and define the port number.
+
+2. **Middleware for Parsing JSON Requests:**
+   - We use `express.json()` middleware to parse JSON requests, enabling the server to handle JSON data in requests.
+
+3. **Route for Getting All Books (GET):**
+   - We define a route (`/api/v1/books`) using the GET method to retrieve all books from the server.
+
+4. **Route for Getting a Single Book by ID (GET):**
+   - We define a route (`/api/v1/books/:id`) using the GET method to retrieve a single book by its ID.
+
+5. **Route for Creating a New Book (POST):**
+   - We define a route (`/api/v1/books`) using the POST method to create a new book.
+
+6. **Route for Updating an Existing Book (PUT):**
+   - We define a route (`/api/v1/books/:id`) using the PUT method to update an existing book by its ID.
+
+7. **Route for Deleting a Book by ID (DELETE):**
+   - We define a route (`/api/v1/books/:id`) using the DELETE method to delete a book by its ID.
+
+### Summary:
+
+- This example demonstrates how to design RESTful APIs in Express.js for handling CRUD operations.
+- Each route is defined to handle a specific HTTP method (GET, POST, PUT, DELETE) and perform corresponding operations on the data.
+- Error handling is included to handle cases where requested resources are not found.
+- The API is versioned using the URI path (`/api/v1/books`), allowing for future changes without affecting existing clients.
+
+This basic example provides a starting point for building RESTful APIs in Express.js, adhering to RESTful principles and enabling client-server communication for creating, reading, updating, and deleting resources.

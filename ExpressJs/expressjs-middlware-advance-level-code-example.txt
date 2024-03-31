@@ -1,0 +1,97 @@
+Let's dive into a more advanced example of middleware in Express.js, explaining each step in detail:
+
+```javascript
+const express = require('express');
+const app = express();
+
+// Custom middleware function
+function logger(req, res, next) {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next(); // Call the next middleware in the stack
+}
+
+// Another custom middleware function
+function authenticate(req, res, next) {
+    // Assume authentication logic here
+    const isAuthenticated = true;
+    if (isAuthenticated) {
+        next(); // User is authenticated, proceed to next middleware
+    } else {
+        res.status(401).send('Unauthorized'); // Send 401 Unauthorized status
+    }
+}
+
+// Using the logger middleware for all routes
+app.use(logger);
+
+// Route handler with authentication middleware
+app.get('/', authenticate, (req, res) => {
+    res.send('Hello World!');
+});
+
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+```
+
+**Explanation:**
+
+1. **Import Express and Create an App:**
+   ```javascript
+   const express = require('express');
+   const app = express();
+   ```
+   - We import the Express.js module and create an instance of the Express application.
+
+2. **Define Custom Middleware Functions:**
+   ```javascript
+   // Custom middleware function for logging
+   function logger(req, res, next) {
+       console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+       next(); // Call the next middleware in the stack
+   }
+
+   // Custom middleware function for authentication
+   function authenticate(req, res, next) {
+       // Assume authentication logic here
+       const isAuthenticated = true;
+       if (isAuthenticated) {
+           next(); // User is authenticated, proceed to next middleware
+       } else {
+           res.status(401).send('Unauthorized'); // Send 401 Unauthorized status
+       }
+   }
+   ```
+   - We define two custom middleware functions: `logger` and `authenticate`.
+   - The `logger` middleware logs the current date, HTTP method, and URL of the request to the console.
+   - The `authenticate` middleware simulates authentication logic. If the user is authenticated, it calls the `next()` function to proceed to the next middleware. Otherwise, it sends a 401 Unauthorized response.
+
+3. **Use Middleware in the Application:**
+   ```javascript
+   app.use(logger);
+   ```
+   - We use the `app.use()` method to mount the `logger` middleware globally. This means that every incoming request will pass through this middleware, and the log message will be printed to the console.
+
+4. **Define Route Handler with Middleware:**
+   ```javascript
+   app.get('/', authenticate, (req, res) => {
+       res.send('Hello World!');
+   });
+   ```
+   - We define a route handler for the root path ('/').
+   - The route handler uses the `authenticate` middleware to ensure that only authenticated users can access this route.
+   - If the user is authenticated, the route handler sends a response with "Hello World!".
+
+5. **Start the Server:**
+   ```javascript
+   const PORT = process.env.PORT || 3000;
+   app.listen(PORT, () => {
+       console.log(`Server is running on port ${PORT}`);
+   });
+   ```
+   - We start the Express server and listen for incoming HTTP requests on the specified port (3000 by default).
+   - When the server starts, it logs a message to the console indicating the port number.
+
+In summary, this advanced example demonstrates how to use middleware for logging and authentication in an Express.js application. Middleware functions are powerful tools for adding custom behavior to your application's request-response cycle.

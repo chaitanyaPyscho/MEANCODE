@@ -1,0 +1,70 @@
+Sure, let's focus on implementing server-side caching without Redis. We can achieve this by storing cached data in memory, using JavaScript objects as a simple cache mechanism. Here's how we can do it:
+
+```javascript
+const express = require('express');
+const responseTime = require('response-time');
+
+const app = express();
+const port = 3000;
+
+// Simple in-memory cache object
+const cache = {};
+
+// Middleware for response time tracking
+app.use(responseTime());
+
+// Middleware for server-side caching
+app.use((req, res, next) => {
+    const key = req.url;
+
+    if (cache[key]) {
+        console.log('Cache Hit');
+        res.send(cache[key]);
+    } else {
+        console.log('Cache Miss');
+        res.sendResponse = res.send;
+        res.send = (body) => {
+            cache[key] = body; // Cache response in memory
+            res.sendResponse(body);
+        };
+        next();
+    }
+});
+
+// Route for fetching data
+app.get('/data', (req, res) => {
+    // Simulating data fetching from a database
+    const data = { message: 'This is some data' };
+    res.json(data);
+});
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
+```
+
+### Explanation:
+
+1. **Set Up Express App:**
+   - We create an instance of the Express application and define the port number.
+
+2. **In-Memory Cache Object:**
+   - We create a simple cache object (`cache`) using a JavaScript object. This object will store cached data in memory.
+
+3. **Server-side Caching Middleware:**
+   - We use the `response-time` middleware to track response times for requests.
+   - We define middleware to handle server-side caching. It checks if the requested data exists in the cache object by using the request URL as the cache key.
+   - If the data is found in the cache (cache hit), it sends the cached data as the response.
+   - If the data is not found in the cache (cache miss), it continues to the next middleware to fetch the data and cache it in memory before sending the response.
+
+4. **Route for Fetching Data:**
+   - We define a route (`/data`) for fetching data. In a real application, this route would typically fetch data from a database.
+   - For demonstration purposes, we simulate fetching data by sending a JSON response with some dummy data.
+
+### Summary:
+
+- In this approach, we implement server-side caching without using an external caching mechanism like Redis.
+- Cached data is stored in memory using a simple JavaScript object (`cache`).
+- Middleware functions are used to integrate caching into the request-response cycle, providing server-side caching benefits.
+
+This example demonstrates a basic implementation of server-side caching without Redis in an Express.js application. While this approach is simple and suitable for small-scale applications, it may not be suitable for applications with high traffic or large datasets due to memory constraints. For such scenarios, using a dedicated caching solution like Redis is recommended.

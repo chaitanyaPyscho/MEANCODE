@@ -1,0 +1,57 @@
+Certainly! Here's a basic example of using cookies in an Express.js application, along with step-by-step explanations:
+
+```javascript
+const express = require('express');
+const cookieParser = require('cookie-parser');
+
+const app = express();
+const port = 3000;
+
+// Middleware for parsing cookies
+app.use(cookieParser());
+
+// Route for setting a cookie
+app.get('/set-cookie', (req, res) => {
+    res.cookie('username', 'john_doe', { maxAge: 900000, httpOnly: true });
+    res.send('Cookie set successfully');
+});
+
+// Route for getting a cookie
+app.get('/get-cookie', (req, res) => {
+    const username = req.cookies.username;
+    res.send(`Username: ${username}`);
+});
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
+```
+
+### Step-by-Step Explanation:
+
+1. **Import Necessary Modules:**
+   - We start by importing Express.js and the `cookie-parser` middleware, which helps in parsing cookies from incoming requests.
+
+2. **Create Express App:**
+   - We create an instance of the Express application and define the port number on which the server will listen.
+
+3. **Use Cookie Parser Middleware:**
+   - We use the `cookieParser()` middleware to parse cookies from incoming requests automatically.
+
+4. **Set Cookie Route:**
+   - We define a route (`/set-cookie`) for setting a cookie. When a client makes a GET request to this route, the server sets a cookie named 'username' with the value 'john_doe'. We also set options like `maxAge` (expiration time in milliseconds) and `httpOnly` (to prevent client-side access via JavaScript).
+
+5. **Get Cookie Route:**
+   - We define a route (`/get-cookie`) for getting the value of the cookie previously set. When a client makes a GET request to this route, the server retrieves the value of the 'username' cookie from the request cookies and sends it back as a response.
+
+6. **Start Server:**
+   - We start the Express server, which listens for incoming requests on the specified port.
+
+### Summary:
+
+- The `cookie-parser` middleware is used to parse cookies in Express.js applications.
+- Cookies can be set in responses using `res.cookie()`.
+- Cookies can be retrieved from incoming requests using `req.cookies`.
+- Cookies are sent along with every subsequent request to the server, allowing for state persistence between requests.
+
+This example demonstrates a basic implementation of cookie handling in an Express.js application. Cookies are commonly used for various purposes such as session management, user authentication, and storing user preferences.

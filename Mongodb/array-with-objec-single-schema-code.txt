@@ -1,0 +1,115 @@
+Certainly! Below are examples of MongoDB schemas that demonstrate arrays, nested objects, and nested data structures:
+
+1. **Array of Primitive Types**:
+   Define a schema with an array of primitive types (e.g., strings, numbers).
+
+```javascript
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const todoSchema = new Schema({
+    tasks: [String]
+});
+
+const Todo = mongoose.model('Todo', todoSchema);
+
+// Example usage:
+const todo = new Todo({
+    tasks: ['Task 1', 'Task 2', 'Task 3']
+});
+```
+
+2. **Array of Nested Objects**:
+   Define a schema with an array of nested objects.
+
+```javascript
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const commentSchema = new Schema({
+    user: { type: String, required: true },
+    content: { type: String, required: true }
+});
+
+const postSchema = new Schema({
+    title: { type: String, required: true },
+    comments: [commentSchema]
+});
+
+const Post = mongoose.model('Post', postSchema);
+
+// Example usage:
+const post = new Post({
+    title: 'Sample Post',
+    comments: [
+        { user: 'User 1', content: 'Comment 1' },
+        { user: 'User 2', content: 'Comment 2' }
+    ]
+});
+```
+
+3. **Nested Object within an Object**:
+   Define a schema with nested objects within another object.
+
+```javascript
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const addressSchema = new Schema({
+    street: String,
+    city: String,
+    state: String,
+    country: String
+});
+
+const userSchema = new Schema({
+    name: { type: String, required: true },
+    age: { type: Number, required: true },
+    address: addressSchema
+});
+
+const User = mongoose.model('User', userSchema);
+
+// Example usage:
+const user = new User({
+    name: 'John Doe',
+    age: 30,
+    address: {
+        street: '123 Main St',
+        city: 'Cityville',
+        state: 'State',
+        country: 'Country'
+    }
+});
+```
+
+4. **Array of Objects with Nested Data**:
+   Define a schema with an array of objects containing nested data.
+
+```javascript
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const itemSchema = new Schema({
+    name: String,
+    quantity: Number
+});
+
+const orderSchema = new Schema({
+    orderNumber: { type: String, required: true },
+    items: [itemSchema]
+});
+
+const Order = mongoose.model('Order', orderSchema);
+
+// Example usage:
+const order = new Order({
+    orderNumber: '12345',
+    items: [
+        { name: 'Product 1', quantity: 2 },
+        { name: 'Product 2', quantity: 1 }
+    ]
+});
+```
+
+These examples demonstrate various ways to define MongoDB schemas with arrays, nested objects, and nested data structures. You can customize these schemas based on your specific requirements and data modeling needs.

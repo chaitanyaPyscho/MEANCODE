@@ -1,0 +1,130 @@
+Sure, let's create a simple login and logout example using JWT (JSON Web Tokens) for authentication in Express.js, and I'll explain each step of the code:
+
+Step 1: Install required packages
+```bash
+npm install express jsonwebtoken body-parser
+```
+
+Step 2: Create an Express application and set up middleware
+
+```javascript
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+// Middleware for parsing JSON bodies
+app.use(bodyParser.json());
+
+// Secret key for JWT signing and verification
+const secretKey = 'your_secret_key';
+```
+
+**Explanation:**
+- We import the necessary modules (`express`, `jsonwebtoken`, `body-parser`) and create an instance of the Express application.
+- We use the `body-parser` middleware to parse JSON request bodies.
+- We define a `secretKey` which will be used for signing and verifying JWT tokens. Replace `'your_secret_key'` with a secret key of your choice.
+
+Step 3: Define login route handler
+
+```javascript
+app.post('/login', (req, res) => {
+    // Mock user data (replace with actual user authentication logic)
+    const user = { id: 1, username: 'user1', password: 'password1' };
+
+    // Check if username and password are correct
+    if (req.body.username === user.username && req.body.password === user.password) {
+        // Generate JWT token
+        const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
+
+        // Send token as response
+        res.json({ token });
+    } else {
+        // Unauthorized
+        res.status(401).json({ message: 'Invalid username or password' });
+    }
+});
+```
+
+**Explanation:**
+- We define a route handler for the '/login' endpoint.
+- In this example, we mock user data (replace with actual user authentication logic).
+- We check if the provided username and password match the mock user data.
+- If authentication succeeds, we generate a JWT token using `jwt.sign()` method. The token payload contains the user ID.
+- We set an expiration time of 1 hour for the token (`{ expiresIn: '1h' }`).
+- We send the generated token as a JSON response.
+- If authentication fails, we send a 401 Unauthorized response with an error message.
+
+Step 4: Define logout route handler (optional)
+
+```javascript
+app.get('/logout', (req, res) => {
+    // No action required for logout with JWT token
+    res.send('Logged out successfully');
+});
+```
+
+**Explanation:**
+- We define a route handler for the '/logout' endpoint.
+- In this example, since JWT tokens are stateless and stored on the client-side, there's no specific action required for logout. Therefore, we simply send a success message.
+
+Step 5: Protect routes with JWT authentication middleware
+
+```javascript
+function authenticateToken(req, res, next) {
+    // Get token from request headers
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    // Check if token exists
+    if (!token) {
+        return res.status(401).json({ message: 'Token not found' });
+    }
+
+    // Verify token
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            return res.status(403).json({ message: 'Invalid token' });
+        }
+        req.userId = decoded.userId; // Attach user ID to request object
+        next();
+    });
+}
+```
+
+**Explanation:**
+- We define a middleware function `authenticateToken` for JWT token authentication.
+- The middleware extracts the token from the request headers (`Authorization` header) and verifies its validity using `jwt.verify()` method.
+- If the token is valid, it extracts the user ID from the decoded token and attaches it to the request object (`req.userId`).
+- If the token is invalid or not found, it sends an appropriate error response.
+
+Step 6: Protect routes with authentication middleware
+
+```javascript
+// Example protected route
+app.get('/profile', authenticateToken, (req, res) => {
+    // Get user ID from request object
+    const userId = req.userId;
+    res.json({ userId });
+});
+```
+
+**Explanation:**
+- We define a route handler for the '/profile' endpoint, which is protected by the `authenticateToken` middleware.
+- The middleware ensures that only authenticated users with a valid JWT token can access this route.
+- Inside the route handler, we can access the user ID attached to the request object (`req.userId`) and send it as a JSON response.
+
+Step 7: Start the server
+
+```javascript
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+```
+
+**Explanation:**
+- We start the Express server and listen for incoming HTTP requests on the specified port.
+
+In summary, this example demonstrates how to implement basic login and protected routes with JWT token authentication in Express.js. The `jsonwebtoken` module is used to generate and verify JWT tokens, and middleware functions are used to protect routes by validating the JWT token provided in the request headers.

@@ -1,0 +1,79 @@
+Certainly! Here are some additional MongoDB functions and methods commonly used in company and daily bases scenarios, along with code examples:
+
+1. **Querying Data**:
+   MongoDB provides various methods to query data from collections, such as `find()`, `findOne()`, `aggregate()`, etc.
+
+   ```javascript
+   // Find documents matching a query
+   const users = await User.find({ age: { $gt: 18 } });
+
+   // Find a single document
+   const user = await User.findOne({ username: 'john_doe' });
+
+   // Perform aggregation operations
+   const result = await User.aggregate([
+       { $group: { _id: "$city", total: { $sum: 1 } } }
+   ]);
+   ```
+
+2. **Updating Data**:
+   MongoDB allows you to update documents using methods like `updateOne()`, `updateMany()`, `findOneAndUpdate()`, etc.
+
+   ```javascript
+   // Update a single document
+   await User.updateOne({ username: 'john_doe' }, { $set: { age: 30 } });
+
+   // Update multiple documents
+   await User.updateMany({ age: { $lt: 18 } }, { $set: { status: 'minor' } });
+
+   // Find and update a document
+   const updatedUser = await User.findOneAndUpdate({ username: 'john_doe' }, { $set: { age: 31 } }, { new: true });
+   ```
+
+3. **Deleting Data**:
+   MongoDB provides methods like `deleteOne()` and `deleteMany()` to remove documents from collections.
+
+   ```javascript
+   // Delete a single document
+   await User.deleteOne({ username: 'john_doe' });
+
+   // Delete multiple documents
+   await User.deleteMany({ age: { $gt: 60 } });
+   ```
+
+4. **Index Management**:
+   You can create, drop, or list indexes using methods like `createIndex()`, `dropIndex()`, `getIndexes()`, etc.
+
+   ```javascript
+   // Create an index
+   await User.createIndex({ username: 1 });
+
+   // Drop an index
+   await User.dropIndex('username_1');
+
+   // List indexes
+   const indexes = await User.getIndexes();
+   ```
+
+5. **Counting Documents**:
+   MongoDB provides the `countDocuments()` method to count the number of documents in a collection that match a query.
+
+   ```javascript
+   // Count documents matching a query
+   const count = await User.countDocuments({ age: { $gt: 18 } });
+   ```
+
+6. **Bulk Operations**:
+   You can perform bulk write operations using the `bulkWrite()` method to execute multiple write operations efficiently.
+
+   ```javascript
+   const bulkOps = [
+       { insertOne: { document: { name: 'John', age: 25 } } },
+       { updateOne: { filter: { name: 'Jane' }, update: { $set: { age: 30 } } } },
+       { deleteOne: { filter: { name: 'Alex' } } }
+   ];
+
+   await User.bulkWrite(bulkOps);
+   ```
+
+These are some of the commonly used MongoDB functions and methods in a company or daily bases scenario. They allow for efficient data manipulation, querying, and index management in MongoDB databases.

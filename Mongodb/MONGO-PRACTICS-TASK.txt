@@ -1,0 +1,49 @@
+Sure, here's a set of MongoDB tasks that progress from basic to advanced levels, along with best practices for each task:
+
+### Basic Level Tasks:
+
+1. **Installation and Setup**:
+   - Task: Install MongoDB on your local machine and verify the installation.
+   - Best Practices: Follow the official MongoDB installation guide for your operating system. Verify the installation by running the MongoDB server and connecting to it using the `mongo` shell.
+
+2. **Create a Database and Collection**:
+   - Task: Create a new database called `mydatabase` and a collection called `users`.
+   - Best Practices: Use the `use` command to switch to the desired database and the `db.createCollection()` method to create a new collection.
+
+3. **Insert Documents**:
+   - Task: Insert multiple documents into the `users` collection with fields like `name`, `age`, and `email`.
+   - Best Practices: Use the `db.collection.insertMany()` method to insert multiple documents into the collection.
+
+### Intermediate Level Tasks:
+
+4. **Querying Data**:
+   - Task: Retrieve all documents from the `users` collection where the `age` field is greater than 25.
+   - Best Practices: Use the `db.collection.find()` method with query filters to retrieve documents that match specific criteria.
+
+5. **Update Documents**:
+   - Task: Update the `age` field of a specific user document.
+   - Best Practices: Use the `db.collection.updateOne()` or `db.collection.updateMany()` method to update one or multiple documents in the collection.
+
+6. **Indexing**:
+   - Task: Create an index on the `email` field to improve query performance.
+   - Best Practices: Use the `db.collection.createIndex()` method to create indexes on fields that are frequently queried or used for sorting.
+
+### Advanced Level Tasks:
+
+7. **Aggregation Pipeline**:
+   - Task: Use the aggregation framework to calculate the average age of users in the `users` collection.
+   - Best Practices: Utilize aggregation pipeline stages like `$group` and `$avg` to perform complex data transformations and calculations.
+
+8. **Data Modeling**:
+   - Task: Design a data model for a blog application with collections for `users`, `posts`, and `comments`, and define relationships between them.
+   - Best Practices: Use embedding or referencing based on the relationship between entities and consider factors like query patterns and data access requirements.
+
+9. **Security and Authentication**:
+   - Task: Implement authentication and create a user with specific roles and privileges.
+   - Best Practices: Enable authentication in MongoDB and create user accounts with appropriate roles and permissions using the `db.createUser()` method.
+
+10. **Backup and Restore**:
+    - Task: Perform a backup of the `mydatabase` database and restore it to a new MongoDB instance.
+    - Best Practices: Use the `mongodump` and `mongorestore` tools to create and restore backups, ensuring data integrity and disaster recovery capabilities.
+
+These tasks cover a range of MongoDB operations and practices, progressing from basic to advanced levels. Completing these tasks will provide a comprehensive understanding of MongoDB fundamentals and advanced features.

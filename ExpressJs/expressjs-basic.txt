@@ -1,0 +1,73 @@
+Express.js is a popular web application framework for Node.js that provides a simple and minimalistic approach to building web servers and APIs. Here are some of the most commonly used functions and methods in Express.js along with examples:
+
+1. **Creating an Express Application:**
+   You start by requiring the Express module and creating an instance of the Express application.
+
+   ```javascript
+   const express = require('express');
+   const app = express();
+   ```
+
+2. **Routing:**
+   Express allows you to define routes to handle different HTTP requests.
+
+   ```javascript
+   // Handling GET request to the homepage
+   app.get('/', (req, res) => {
+       res.send('Hello World!');
+   });
+   ```
+
+3. **Middleware:**
+   Middleware functions are functions that have access to the request object (req), the response object (res), and the next middleware function in the application’s request-response cycle.
+
+   ```javascript
+   // Example middleware function
+   function logger(req, res, next) {
+       console.log('Logging...');
+       next(); // Pass control to the next middleware function
+   }
+   
+   // Using middleware
+   app.use(logger);
+   ```
+
+4. **Handling POST Requests:**
+   Express provides methods to handle different types of HTTP requests.
+
+   ```javascript
+   // Handling POST request to '/users'
+   app.post('/users', (req, res) => {
+       // Handle POST request here
+   });
+   ```
+
+5. **Static Files:**
+   Serving static files such as images, CSS files, and JavaScript files.
+
+   ```javascript
+   // Serving static files from the 'public' directory
+   app.use(express.static('public'));
+   ```
+
+6. **Error Handling:**
+   Express provides a built-in error handler middleware.
+
+   ```javascript
+   app.use((err, req, res, next) => {
+       console.error(err.stack);
+       res.status(500).send('Something broke!');
+   });
+   ```
+
+7. **Setting Up a Server:**
+   Finally, you need to start the Express server to listen for incoming requests.
+
+   ```javascript
+   const PORT = process.env.PORT || 3000;
+   app.listen(PORT, () => {
+       console.log(`Server is running on port ${PORT}`);
+   });
+   ```
+
+These are just some of the basic functions and methods provided by Express.js. There are many more features and functionalities available for building robust web applications and APIs.

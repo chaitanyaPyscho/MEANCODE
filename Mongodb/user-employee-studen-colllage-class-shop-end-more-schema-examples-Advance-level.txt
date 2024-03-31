@@ -1,0 +1,160 @@
+Sure, let's create some more advanced MongoDB schemas for the entities you mentioned:
+
+1. **Students Schema** (Advanced):
+
+```javascript
+const mongoose = require('mongoose');
+
+const studentSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    age: Number,
+    grade: String,
+    address: {
+        street: String,
+        city: String,
+        zip: String
+    },
+    courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
+    guardians: [{
+        relationship: String,
+        name: String,
+        contact: String
+    }]
+});
+
+const Student = mongoose.model('Student', studentSchema);
+module.exports = Student;
+```
+
+2. **Employee Schema** (Advanced):
+
+```javascript
+const mongoose = require('mongoose');
+
+const employeeSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    position: String,
+    department: String,
+    salary: Number,
+    address: {
+        street: String,
+        city: String,
+        zip: String
+    },
+    projects: [{
+        name: String,
+        description: String,
+        startDate: Date,
+        endDate: Date
+    }]
+});
+
+const Employee = mongoose.model('Employee', employeeSchema);
+module.exports = Employee;
+```
+
+3. **Hospital Schema** (Advanced):
+
+```javascript
+const mongoose = require('mongoose');
+
+const hospitalSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    location: String,
+    capacity: Number,
+    departments: [{ name: String, head: String }],
+    doctors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Doctor' }]
+});
+
+const Hospital = mongoose.model('Hospital', hospitalSchema);
+module.exports = Hospital;
+```
+
+4. **College Schema** (Advanced):
+
+```javascript
+const mongoose = require('mongoose');
+
+const collegeSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    location: String,
+    courses: [{ name: String, credits: Number }],
+    students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],
+    professors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Professor' }]
+});
+
+const College = mongoose.model('College', collegeSchema);
+module.exports = College;
+```
+
+5. **Shops Schema** (Advanced):
+
+```javascript
+const mongoose = require('mongoose');
+
+const shopSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    location: String,
+    category: String,
+    openHours: String,
+    products: [{ name: String, price: Number, quantity: Number }]
+});
+
+const Shop = mongoose.model('Shop', shopSchema);
+module.exports = Shop;
+```
+
+6. **Classes Schema** (Advanced):
+
+```javascript
+const mongoose = require('mongoose');
+
+const classSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    teacher: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher' },
+    students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],
+    schedule: {
+        day: String,
+        time: String
+    },
+    assignments: [{
+        title: String,
+        description: String,
+        dueDate: Date
+    }]
+});
+
+const Class = mongoose.model('Class', classSchema);
+module.exports = Class;
+```
+
+7. **User Profile Schema** (Advanced):
+
+```javascript
+const mongoose = require('mongoose');
+
+const userProfileSchema = new mongoose.Schema({
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    fullName: String,
+    age: Number,
+    address: {
+        street: String,
+        city: String,
+        zip: String
+    },
+    roles: [{ type: String }],
+    profilePicture: String,
+    socialLinks: {
+        facebook: String,
+        twitter: String,
+        linkedin: String
+    }
+});
+
+const UserProfile = mongoose.model('UserProfile', userProfileSchema);
+module.exports = UserProfile;
+```
+
+These are more advanced MongoDB schema examples that include additional features such as referencing other collections, nested arrays of objects, and more complex data structures. You can further customize and expand them based on your specific application requirements.

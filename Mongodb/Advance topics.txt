@@ -1,0 +1,107 @@
+Advance topics
+
+Aggregation Pipeline Optimization:
+
+MongoDB's aggregation pipeline allows you to perform complex data processing tasks. You can optimize pipeline performance by strategically using stages, indexes, and projections.
+Example:
+javascript
+Copy code
+db.sales.aggregate([
+  { $match: { status: "completed" } },
+  { $group: { _id: "$product", totalSales: { $sum: "$amount" } } }
+]);
+Additional Information: Utilize $match to filter data early in the pipeline, $project to include or exclude fields, and $sort to sort documents.
+Indexing Strategies:
+
+MongoDB supports various indexing strategies to improve query performance. You can create single-field indexes, compound indexes, multikey indexes, text indexes, and geospatial indexes.
+Example:
+javascript
+Copy code
+db.users.createIndex({ email: 1 }, { unique: true }); // Unique index on email field
+db.products.createIndex({ category: 1, price: -1 }); // Compound index on category and price fields
+Additional Information: Consider factors like query patterns, write performance, and index size when choosing indexing strategies.
+Schema Design Patterns:
+
+MongoDB's flexible schema allows for various schema design patterns. You can use patterns like Embedded Documents, Normalized References, Preallocated Keys, and Polymorphic Patterns.
+Example:
+javascript
+Copy code
+// Embedded Documents
+db.orders.insertOne({
+  _id: ObjectId(),
+  customer: {
+    name: "John",
+    email: "john@example.com"
+  },
+  items: [
+    { sku: "ABC123", quantity: 2 },
+    { sku: "XYZ789", quantity: 1 }
+  ]
+});
+Additional Information: Choose schema design patterns based on data access patterns, query requirements, and performance considerations.
+Geospatial Indexing and Queries:
+
+MongoDB supports geospatial indexing and queries for location-based data. You can store and query points, lines, and polygons.
+Example:
+javascript
+Copy code
+db.places.createIndex({ location: "2dsphere" }); // Create a 2dsphere index on location field
+db.places.find({
+  location: {
+    $near: {
+      $geometry: {
+        type: "Point",
+        coordinates: [-73.9857, 40.7484]
+      },
+      $maxDistance: 1000 // in meters
+    }
+  }
+});
+Additional Information: Use geospatial indexing for queries like finding nearby locations or locations within a specific boundary.
+Text Search:
+
+MongoDB provides full-text search capabilities for string content. You can create text indexes and perform text searches using the $text operator.
+Example:
+javascript
+Copy code
+db.articles.createIndex({ content: "text" }); // Create a text index on content field
+db.articles.find({ $text: { $search: "mongodb" } });
+Additional Information: Text indexes support language-specific stemming, stop words, and case insensitivity.
+Change Streams and Event-Driven Architecture:
+
+MongoDB's Change Streams allow applications to listen for changes in collections in real-time. You can use Change Streams to build event-driven architectures and trigger actions based on database changes.
+Example:
+javascript
+Copy code
+const changeStream = db.collection.watch();
+changeStream.on("change", change => {
+  console.log("Change occurred: ", change);
+});
+Additional Information: Change Streams support various event types like insertions, updates, replacements, and deletions.
+Transactions:
+
+MongoDB 4.0 introduced multi-document transactions for replica sets. You can use transactions to perform multiple operations atomically.
+Example:
+javascript
+Copy code
+const session = db.getMongo().startSession();
+session.startTransaction();
+try {
+  // Perform operations
+  session.commitTransaction();
+} catch (error) {
+  session.abortTransaction();
+  throw error;
+} finally {
+  session.endSession();
+}
+Additional Information: Transactions provide ACID (Atomicity, Consistency, Isolation, Durability) guarantees for operations within a session.
+Sharding and Replication:
+
+Sharding distributes data across multiple servers to improve scalability and performance. Replication provides redundancy and fault tolerance by maintaining multiple copies of data.
+Example:
+javascript
+Copy code
+sh.shardCollection("test.users", { "username": "hashed" });
+Additional Information: Configure sharding and replication to handle increasing data volumes and provide high availability.
+These advanced MongoDB topics provide deeper insights into optimizing performance, designing schemas, and building scalable and resilient applications. By mastering these concepts, you can leverage MongoDB's full potential in your projects.

@@ -1,0 +1,68 @@
+Sure! Here's a list of common MongoDB methods and functions along with examples demonstrating their usage and output:
+
+1. **insertOne()**: Inserts a single document into a collection.
+   ```javascript
+   db.users.insertOne({ name: "Alice", age: 30 });
+   ```
+   Output: `{ "acknowledged" : true, "insertedId" : ObjectId("60c96e5e869ed0e01ec0f3db") }`
+
+2. **insertMany()**: Inserts multiple documents into a collection.
+   ```javascript
+   db.users.insertMany([
+     { name: "Bob", age: 25 },
+     { name: "Charlie", age: 35 }
+   ]);
+   ```
+   Output: `{ "acknowledged" : true, "insertedIds" : [ ObjectId("60c96ef5869ed0e01ec0f3dc"), ObjectId("60c96ef5869ed0e01ec0f3dd") ] }`
+
+3. **find()**: Retrieves documents from a collection.
+   ```javascript
+   db.users.find({ age: { $gt: 25 } });
+   ```
+   Output: `[{ "_id" : ObjectId("60c96e5e869ed0e01ec0f3db"), "name" : "Alice", "age" : 30 }, { "_id" : ObjectId("60c96ef5869ed0e01ec0f3dd"), "name" : "Charlie", "age" : 35 }]`
+
+4. **findOne()**: Retrieves a single document from a collection.
+   ```javascript
+   db.users.findOne({ name: "Bob" });
+   ```
+   Output: `{ "_id" : ObjectId("60c96ef5869ed0e01ec0f3dc"), "name" : "Bob", "age" : 25 }`
+
+5. **updateOne()**: Updates a single document in a collection.
+   ```javascript
+   db.users.updateOne({ name: "Alice" }, { $set: { age: 31 } });
+   ```
+   Output: `{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }`
+
+6. **updateMany()**: Updates multiple documents in a collection.
+   ```javascript
+   db.users.updateMany({ age: { $gt: 30 } }, { $set: { status: "senior" } });
+   ```
+   Output: `{ "acknowledged" : true, "matchedCount" : 2, "modifiedCount" : 2 }`
+
+7. **deleteOne()**: Deletes a single document from a collection.
+   ```javascript
+   db.users.deleteOne({ name: "Charlie" });
+   ```
+   Output: `{ "acknowledged" : true, "deletedCount" : 1 }`
+
+8. **deleteMany()**: Deletes multiple documents from a collection.
+   ```javascript
+   db.users.deleteMany({ age: { $lt: 30 } });
+   ```
+   Output: `{ "acknowledged" : true, "deletedCount" : 1 }`
+
+9. **aggregate()**: Performs aggregation operations on a collection.
+   ```javascript
+   db.sales.aggregate([
+     { $group: { _id: "$product", totalSales: { $sum: "$amount" } } }
+   ]);
+   ```
+   Output: `[{ "_id" : "productA", "totalSales" : 100 }, { "_id" : "productB", "totalSales" : 150 }]`
+
+10. **createIndex()**: Creates an index on a collection.
+    ```javascript
+    db.users.createIndex({ name: 1 });
+    ```
+    Output: `{ "createdCollectionAutomatically" : false, "numIndexesBefore" : 1, "numIndexesAfter" : 2, "ok" : 1 }`
+
+These are just a few examples of MongoDB methods and functions commonly used for CRUD operations, aggregation, and indexing. Each method provides output indicating the success of the operation and any relevant information, such as the number of documents affected or the index created.

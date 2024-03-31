@@ -1,0 +1,121 @@
+Sure, here are basic level MongoDB schema examples for the entities you mentioned:
+
+1. **Students Schema**:
+```javascript
+const mongoose = require('mongoose');
+
+const studentSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    age: Number,
+    grade: String,
+    address: {
+        street: String,
+        city: String,
+        zip: String
+    }
+});
+
+const Student = mongoose.model('Student', studentSchema);
+module.exports = Student;
+```
+
+2. **Employee Schema**:
+```javascript
+const mongoose = require('mongoose');
+
+const employeeSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    position: String,
+    department: String,
+    salary: Number
+});
+
+const Employee = mongoose.model('Employee', employeeSchema);
+module.exports = Employee;
+```
+
+3. **Hospital Schema**:
+```javascript
+const mongoose = require('mongoose');
+
+const hospitalSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    location: String,
+    capacity: Number,
+    departments: [String]
+});
+
+const Hospital = mongoose.model('Hospital', hospitalSchema);
+module.exports = Hospital;
+```
+
+4. **College Schema**:
+```javascript
+const mongoose = require('mongoose');
+
+const collegeSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    location: String,
+    courses: [String],
+    students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }]
+});
+
+const College = mongoose.model('College', collegeSchema);
+module.exports = College;
+```
+
+5. **Shops Schema**:
+```javascript
+const mongoose = require('mongoose');
+
+const shopSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    location: String,
+    category: String,
+    openHours: String
+});
+
+const Shop = mongoose.model('Shop', shopSchema);
+module.exports = Shop;
+```
+
+6. **Classes Schema**:
+```javascript
+const mongoose = require('mongoose');
+
+const classSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    teacher: String,
+    students: [String],
+    schedule: {
+        day: String,
+        time: String
+    }
+});
+
+const Class = mongoose.model('Class', classSchema);
+module.exports = Class;
+```
+
+7. **User Profile Schema**:
+```javascript
+const mongoose = require('mongoose');
+
+const userProfileSchema = new mongoose.Schema({
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    fullName: String,
+    age: Number,
+    address: {
+        street: String,
+        city: String,
+        zip: String
+    }
+});
+
+const UserProfile = mongoose.model('UserProfile', userProfileSchema);
+module.exports = UserProfile;
+```
+
+These are basic level schema examples for different entities. You can customize and expand them according to your specific application requirements.

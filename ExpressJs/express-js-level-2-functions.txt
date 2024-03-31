@@ -1,0 +1,105 @@
+Sure, let's delve deeper into some additional functions and methods provided by Express.js with examples:
+
+1. **Route Parameters:**
+   Express allows you to define routes with parameters that can be accessed in the route handler.
+
+   ```javascript
+   // Route with parameter
+   app.get('/users/:userId', (req, res) => {
+       const userId = req.params.userId;
+       res.send(`User ID: ${userId}`);
+   });
+   ```
+
+2. **Query Parameters:**
+   You can access query parameters sent in the URL.
+
+   ```javascript
+   // Route with query parameter
+   app.get('/search', (req, res) => {
+       const query = req.query.q;
+       res.send(`Search Query: ${query}`);
+   });
+   ```
+
+3. **Request Body Parsing:**
+   Express provides middleware for parsing the request body.
+
+   ```javascript
+   const bodyParser = require('body-parser');
+   app.use(bodyParser.json()); // Parse JSON bodies
+   app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
+   ```
+
+4. **Sending JSON Responses:**
+   You can send JSON responses easily.
+
+   ```javascript
+   app.get('/api/data', (req, res) => {
+       const data = { name: 'John', age: 30 };
+       res.json(data);
+   });
+   ```
+
+5. **Redirects:**
+   Express allows you to redirect requests to other routes or URLs.
+
+   ```javascript
+   app.get('/old-route', (req, res) => {
+       res.redirect('/new-route');
+   });
+   ```
+
+6. **Template Engines:**
+   Express can be integrated with template engines like EJS, Handlebars, or Pug.
+
+   ```javascript
+   app.set('view engine', 'ejs'); // Set EJS as the template engine
+
+   app.get('/profile', (req, res) => {
+       const data = { name: 'John', age: 30 };
+       res.render('profile', data); // Renders the 'profile.ejs' template with data
+   });
+   ```
+
+7. **Route Middleware:**
+   You can define middleware specific to certain routes.
+
+   ```javascript
+   // Middleware function
+   function authMiddleware(req, res, next) {
+       // Check authentication
+       if (req.isAuthenticated()) {
+           return next();
+       }
+       res.redirect('/login');
+   }
+   
+   // Apply middleware to specific route
+   app.get('/secure-route', authMiddleware, (req, res) => {
+       res.send('This is a secure route');
+   });
+   ```
+
+8. **Chaining Middleware:**
+   Middleware functions can be chained together.
+
+   ```javascript
+   // Middleware function
+   function middleware1(req, res, next) {
+       // Do something
+       next();
+   }
+   
+   function middleware2(req, res, next) {
+       // Do something else
+       next();
+   }
+   
+   // Chaining middleware
+   app.get('/example', middleware1, middleware2, (req, res) => {
+       res.send('Example route');
+   });
+   ```
+
+These are just a few more examples of functions and methods provided by Express.js to help you build powerful and flexible web applications.

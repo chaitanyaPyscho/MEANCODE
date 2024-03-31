@@ -1,0 +1,193 @@
+Certainly! Let's start with a basic example of using JWT (JSON Web Tokens) for authentication in an Express.js application. We'll then proceed to an advanced example with multiple routes, middleware, and more comprehensive token handling.
+
+### Basic Example: JWT Token Authentication
+
+**Step 1: Install Required Packages**
+```bash
+npm install express jsonwebtoken body-parser
+```
+
+**Step 2: Create Express Application and Set Up Middleware**
+```javascript
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
+
+const app = express();
+const secretKey = 'your_secret_key';
+
+app.use(bodyParser.json());
+```
+
+- Import necessary modules (`express`, `jsonwebtoken`, `body-parser`).
+- Create an instance of the Express application.
+- Set up `body-parser` middleware for parsing JSON request bodies.
+- Define a secret key for JWT signing and verification.
+
+**Step 3: Create a Route for User Login and Token Generation**
+```javascript
+app.post('/login', (req, res) => {
+    // Mock user data (replace with actual user authentication logic)
+    const user = { id: 1, username: 'user1', password: 'password1' };
+
+    // Check if username and password are correct
+    if (req.body.username === user.username && req.body.password === user.password) {
+        // Generate JWT token
+        const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
+        res.json({ token });
+    } else {
+        res.status(401).json({ message: 'Invalid username or password' });
+    }
+});
+```
+
+- Create a route handler for the '/login' endpoint.
+- Mock user data or replace it with actual user authentication logic.
+- Check if the provided username and password match the user data.
+- If authentication succeeds, generate a JWT token using `jwt.sign()`.
+- Set an expiration time for the token (`{ expiresIn: '1h' }`).
+- Send the generated token as a JSON response.
+- If authentication fails, send a 401 Unauthorized response with an error message.
+
+**Step 4: Protect a Route with JWT Authentication Middleware**
+```javascript
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ message: 'Token not found' });
+    }
+
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            return res.status(403).json({ message: 'Invalid token' });
+        }
+        req.userId = decoded.userId;
+        next();
+    });
+}
+
+// Example protected route
+app.get('/profile', authenticateToken, (req, res) => {
+    const userId = req.userId;
+    res.json({ userId });
+});
+```
+
+- Create a middleware function `authenticateToken` for JWT token authentication.
+- Extract the token from the request headers (`Authorization` header) and verify its validity using `jwt.verify()`.
+- If the token is valid, extract the user ID from the decoded token and attach it to the request object (`req.userId`).
+- If the token is invalid or not found, send an appropriate error response.
+- Protect a route (e.g., '/profile') by applying the `authenticateToken` middleware.
+
+**Step 5: Start the Server**
+```javascript
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+```
+
+- Start the Express server and listen for incoming HTTP requests.
+
+This basic example demonstrates user authentication using JWT tokens in an Express.js application. It includes a login route for token generation and a protected route that requires a valid token for access.
+
+### Advanced Example: Company-Level JWT Authentication
+
+Now, let's explore an advanced example that includes multiple routes, user roles, and additional middleware.
+
+**Step 1: Set Up Company-Level Authentication Middleware**
+```javascript
+// Mock company data (replace with actual company authentication logic)
+const companies = [
+    { id: 1, name: 'Company A', apiKey: 'api_key_a' },
+    { id: 2, name: 'Company B', apiKey: 'api_key_b' }
+];
+
+function authenticateCompany(req, res, next) {
+    const apiKey = req.headers['api-key'];
+
+    if (!apiKey) {
+        return res.status(401).json({ message: 'API key not found' });
+    }
+
+    const company = companies.find(c => c.apiKey === apiKey);
+
+    if (!company) {
+        return res.status(403).json({ message: 'Invalid API key' });
+    }
+
+    req.company = company;
+    next();
+}
+
+app.use(authenticateCompany);
+```
+
+- Mock company data or replace it with actual company authentication logic.
+- Create a middleware function `authenticateCompany` to authenticate companies based on API keys.
+- Extract the API key from the request headers (`api-key` header).
+- If the API key is not found or invalid, send an appropriate error response.
+- If the API key is valid, attach the company object to the request object (`req.company`).
+- Apply the `authenticateCompany` middleware globally using `app.use()`.
+
+**Step 2: Enhance User Authentication Middleware**
+```javascript
+function authenticateUser(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ message: 'Token not found' });
+    }
+
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            return res.status(403).json({ message: 'Invalid token' });
+        }
+
+        // Check user roles (mock roles for demonstration)
+        const userRoles = ['employee', 'manager', 'admin'];
+
+        if (!userRoles.includes(decoded.role)) {
+            return res.status(403).json({ message: 'Insufficient privileges' });
+        }
+
+        req.user = decoded;
+        next();
+    });
+}
+
+app.use(authenticateUser);
+```
+
+- Modify the existing `authenticateToken` middleware to check user roles.
+- Mock user roles (replace with actual role logic).
+- If the decoded user role is not allowed, send a 403 Forbidden response.
+- Attach the decoded user information to the request object (`req.user`).
+
+**Step 3: Define Additional Routes with Authentication**
+```javascript
+// Public route accessible without authentication
+app.get('/public', (req, res) => {
+    res.send('Public information');
+});
+
+// Company-level route accessible only with valid company API key
+app.get('/company-info', (req, res) => {
+    const company = req.company;
+    res.json({ companyId: company.id, companyName: company.name });
+});
+
+// User-level route accessible with a valid JWT token and allowed user roles
+app.get('/user-profile', (req, res) => {
+    const user = req.user;
+    res.json({ userId: user.userId, username: user.username, role: user.role });
+});
+```
+
+- Define additional routes with varying access levels.
+- '/public': A public route accessible without authentication.
+- '/company-info': A company-level route accessible only with a valid company API key.
+- '/user-profile': A user-level route accessible with a valid JWT

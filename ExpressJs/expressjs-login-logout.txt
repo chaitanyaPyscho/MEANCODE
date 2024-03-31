@@ -1,0 +1,126 @@
+Sure, let's create a basic login and logout example using middleware in Express.js, and I'll explain each line of code:
+
+```javascript
+const express = require('express');
+const app = express();
+
+// Middleware for parsing JSON bodies
+app.use(express.json());
+
+// Middleware for logging
+function logger(req, res, next) {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next(); // Call the next middleware in the stack
+}
+
+// Mock user data
+const users = [
+    { id: 1, username: 'user1', password: 'password1' },
+    { id: 2, username: 'user2', password: 'password2' }
+];
+
+// Middleware for authentication
+function authenticate(req, res, next) {
+    const { username, password } = req.body;
+    const user = users.find(u => u.username === username && u.password === password);
+    if (user) {
+        req.user = user; // Attach user object to request for future use
+        next(); // User is authenticated, proceed to next middleware
+    } else {
+        res.status(401).send('Unauthorized'); // Send 401 Unauthorized status
+    }
+}
+
+// Route handler for login
+app.post('/login', authenticate, (req, res) => {
+    res.send(`Welcome, ${req.user.username}!`);
+});
+
+// Route handler for logout
+app.get('/logout', (req, res) => {
+    // Perform logout actions (if any)
+    res.send('Logged out successfully');
+});
+
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+```
+
+**Explanation:**
+
+1. **Import Express and Create an App:**
+   ```javascript
+   const express = require('express');
+   const app = express();
+   ```
+   - We import the Express.js module and create an instance of the Express application.
+
+2. **Middleware for Parsing JSON Bodies:**
+   ```javascript
+   app.use(express.json());
+   ```
+   - We use the built-in `express.json()` middleware to parse JSON request bodies.
+
+3. **Middleware for Logging:**
+   ```javascript
+   function logger(req, res, next) {
+       console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+       next(); // Call the next middleware in the stack
+   }
+   ```
+   - We define a custom middleware function named `logger` that logs the current date, HTTP method, and URL of the request to the console.
+
+4. **Mock User Data:**
+   ```javascript
+   const users = [
+       { id: 1, username: 'user1', password: 'password1' },
+       { id: 2, username: 'user2', password: 'password2' }
+   ];
+   ```
+   - We create an array of mock user data for demonstration purposes.
+
+5. **Middleware for Authentication:**
+   ```javascript
+   function authenticate(req, res, next) {
+       const { username, password } = req.body;
+       const user = users.find(u => u.username === username && u.password === password);
+       if (user) {
+           req.user = user; // Attach user object to request for future use
+           next(); // User is authenticated, proceed to next middleware
+       } else {
+           res.status(401).send('Unauthorized'); // Send 401 Unauthorized status
+       }
+   }
+   ```
+   - We define a custom middleware function named `authenticate` for user authentication. It checks if the provided username and password match any user in the `users` array. If authentication succeeds, it attaches the user object to the request (`req.user`) for future use. If authentication fails, it sends a 401 Unauthorized response.
+
+6. **Route Handler for Login:**
+   ```javascript
+   app.post('/login', authenticate, (req, res) => {
+       res.send(`Welcome, ${req.user.username}!`);
+   });
+   ```
+   - We define a route handler for the '/login' endpoint. It uses the `authenticate` middleware to verify the user's credentials. If authentication succeeds, it sends a welcome message with the username.
+
+7. **Route Handler for Logout:**
+   ```javascript
+   app.get('/logout', (req, res) => {
+       // Perform logout actions (if any)
+       res.send('Logged out successfully');
+   });
+   ```
+   - We define a route handler for the '/logout' endpoint. This handler can be used to perform logout actions (if any) and responds with a success message.
+
+8. **Start the Server:**
+   ```javascript
+   const PORT = process.env.PORT || 3000;
+   app.listen(PORT, () => {
+       console.log(`Server is running on port ${PORT}`);
+   });
+   ```
+   - We start the Express server and listen for incoming HTTP requests on the specified port. When the server starts, it logs a message to the console indicating the port number.
+
+In summary, this example demonstrates how to implement basic login and logout functionality using middleware in Express.js. The `authenticate` middleware ensures that only authenticated users can access certain routes, while the `logger` middleware logs request information to the console.e
