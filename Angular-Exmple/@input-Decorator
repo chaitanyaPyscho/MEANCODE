@@ -1,0 +1,88 @@
+In Angular, `@Input()` is a decorator used to declare an input property in a component. Input properties allow data to flow into a component from its parent component. Here's an example to demonstrate the usage of `@Input()`:
+
+1. **Create a Child Component:**
+
+Let's create a simple child component called `ChildComponent`:
+
+```typescript
+// child.component.ts
+
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  template: `
+    <div>
+      <p>Received message from parent: {{ message }}</p>
+    </div>
+  `
+})
+export class ChildComponent {
+  @Input() message: string; // Declaring input property
+}
+```
+
+In the above code:
+- We import `Input` decorator from `@angular/core`.
+- We declare an input property called `message` using `@Input()` decorator.
+
+2. **Use the Child Component in a Parent Component:**
+
+Now, let's use the `ChildComponent` in a parent component called `ParentComponent`:
+
+```typescript
+// parent.component.ts
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-parent',
+  template: `
+    <div>
+      <app-child [message]="parentMessage"></app-child>
+    </div>
+  `
+})
+export class ParentComponent {
+  parentMessage = 'Hello from ParentComponent!';
+}
+```
+
+In the parent component template:
+- We use the `app-child` selector to include the `ChildComponent`.
+- We bind the `message` property of `ChildComponent` to the `parentMessage` property of `ParentComponent`.
+
+3. **Register Components:**
+
+Make sure to register both `ChildComponent` and `ParentComponent` in the appropriate module:
+
+```typescript
+// app.module.ts
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { ChildComponent } from './child.component';
+import { ParentComponent } from './parent.component';
+
+@NgModule({
+  imports: [BrowserModule],
+  declarations: [ChildComponent, ParentComponent],
+  bootstrap: [ParentComponent]
+})
+export class AppModule { }
+```
+
+4. **Use the Parent Component:**
+
+Include the `ParentComponent` selector in the root component's template (e.g., `app.component.html`):
+
+```html
+<!-- app.component.html -->
+
+<app-parent></app-parent>
+```
+
+Now, when you run your Angular application, the `ParentComponent` will render the `ChildComponent`, passing the message "Hello from ParentComponent!" to it, and the child component will display the received message. This demonstrates how `@Input()` allows passing data from parent to child components in Angular.
+
+
+--- ja componet mde data recive kraycha ahe tya componet mde @input use krwa lgto data recive krnasathi 

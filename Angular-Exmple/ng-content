@@ -1,0 +1,30 @@
+card componet
+
+<div class="card">
+  <div class="card-body">
+    <ng-content></ng-content>
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores, beatae.
+    </p>
+    <ng-content></ng-content>
+  </div>
+</div>
+
+contact componet
+<div>
+  <app-card>
+    <h1 class="h1">laptop</h1>
+    <a [routerLink]="['/routePath']">Know More</a>
+  </app-card>
+</div>
+
+ya mde don componet ahe card ani contact tr contact componet mde apla multiple componet added ktyche ahe 
+tr an card componet use krt aho tr apla indivisual componet sathi data different pahije
+tr conact compont mdun apn te data pass krt ahe card componet mde 
+ngconetent he data parameter mhun recive krto ani show krto 
+
+ya mde kdi kdi ngcontent he overlap hoto tr selecter use krwa lgto
+
+<ng-content select=".h1-class"></ng-content>
+
+ya mde selector mde .h1-class use kele ahe 

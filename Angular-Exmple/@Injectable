@@ -1,0 +1,9 @@
+import {Injectable } from @angular/core 
+
+
+@Injectable({
+    provideIn:'root'
+})
+
+-- he ak service file ahe tr ya mde Injectable use kele ahe karan Injectable he ak pakare apla serivce mde 
+other dependices sathi access deto  , mnje ak pkare ya mde apn other services inject kru skto

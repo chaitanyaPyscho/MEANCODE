@@ -1,0 +1,96 @@
+Certainly! Let's create a basic example demonstrating the usage of `@Input()` and `@Output()` decorators in Angular:
+
+1. **Create Child Component with Input and Output:**
+
+```typescript
+// child.component.ts
+
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  template: `
+    <div>
+      <p>Received message from parent: {{ message }}</p>
+      <button (click)="sendMessage()">Send Message to Parent</button>
+    </div>
+  `
+})
+export class ChildComponent {
+  @Input() message: string; // Input property
+  @Output() messageEvent = new EventEmitter<string>(); // Output property
+
+  sendMessage() {
+    this.messageEvent.emit('Hello from ChildComponent!');
+  }
+}
+```
+
+In this component:
+- We import `Input`, `Output`, and `EventEmitter` from `@angular/core`.
+- We declare an input property called `message` using `@Input()` decorator, which will receive data from the parent component.
+- We declare an output property called `messageEvent` using `@Output()` decorator, which will emit events to the parent component.
+
+2. **Create Parent Component:**
+
+```typescript
+// parent.component.ts
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-parent',
+  template: `
+    <div>
+      <app-child [message]="parentMessage" (messageEvent)="receiveMessage($event)"></app-child>
+      <p>Message received from child: {{ receivedMessage }}</p>
+    </div>
+  `
+})
+export class ParentComponent {
+  parentMessage = 'Hello from ParentComponent!';
+  receivedMessage: string;
+
+  receiveMessage(message: string) {
+    this.receivedMessage = message;
+  }
+}
+```
+
+In this parent component:
+- We use the `app-child` selector to include the `ChildComponent`.
+- We bind to the `message` input property of `ChildComponent`, passing the `parentMessage` as its value.
+- We bind to the `messageEvent` output property of `ChildComponent` and listen for events emitted by the child component.
+- When the event is emitted, we call the `receiveMessage()` method in the parent component and pass the received message to it.
+
+3. **Register Components:**
+
+Register both `ChildComponent` and `ParentComponent` in the appropriate module:
+
+```typescript
+// app.module.ts
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { ChildComponent } from './child.component';
+import { ParentComponent } from './parent.component';
+
+@NgModule({
+  imports: [BrowserModule],
+  declarations: [ChildComponent, ParentComponent],
+  bootstrap: [ParentComponent]
+})
+export class AppModule { }
+```
+
+4. **Use the Parent Component:**
+
+Include the `ParentComponent` selector in the root component's template (e.g., `app.component.html`):
+
+```html
+<!-- app.component.html -->
+
+<app-parent></app-parent>
+```
+
+Now, when you run your Angular application, the `ParentComponent` will render the `ChildComponent`. The child component will display the message received from the parent component, and when you click the button in the child component, it will emit an event with the message "Hello from ChildComponent!" to the parent component. The parent component will then receive the message and display it. This demonstrates how `@Input()` and `@Output()` decorators allow communication between parent and child components in Angular.
