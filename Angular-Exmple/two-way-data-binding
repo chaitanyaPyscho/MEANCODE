@@ -1,0 +1,52 @@
+In Angular, two-way data binding allows you to synchronize the data between a component class and its template. This means that changes to the model (in the component class) are automatically reflected in the view (the template), and changes in the view are propagated back to the model.
+
+You can achieve two-way data binding using the `[(ngModel)]` syntax along with the `FormsModule` or `ReactiveFormsModule`.
+
+Here's an example of how to use two-way data binding with `[(ngModel)]`:
+
+1. First, ensure you have imported the `FormsModule` in your Angular module:
+
+```typescript
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms'; // Import the FormsModule
+
+import { AppComponent } from './app.component';
+
+@NgModule({
+  imports:      [ BrowserModule, FormsModule ], // Include the FormsModule here
+  declarations: [ AppComponent ],
+  bootstrap:    [ AppComponent ]
+})
+export class AppModule { }
+```
+
+2. In your component's HTML template, use `[(ngModel)]` to bind a variable to an input element:
+
+```html
+<input [(ngModel)]="name" type="text">
+<p>Hello, {{ name }}!</p>
+```
+
+3. In your component class, declare the variable `name` and it will automatically bind to the input field:
+
+```typescript
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  name: string = ''; // Declare the variable
+}
+```
+
+With this setup, any changes you make in the input field will automatically update the `name` variable in the component class, and any changes to the `name` variable in the component class will automatically reflect in the input field.
+
+This is the essence of two-way data binding in Angular. It simplifies the process of keeping the view and the model in sync.
+
+
+## two way data binding mde apn "ngmodal" cha warp krto ani ya mde two mde  view to componet ani compont to view 
+as data transfer hoto

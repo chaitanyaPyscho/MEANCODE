@@ -1,0 +1,41 @@
+It seems like you're asking about Angular template reference variables. In Angular, a template reference variable is a way to refer to elements in your template from your component code. 
+
+You can declare a template reference variable by prefixing an identifier with a hash (#) character. For example:
+```html
+<input #myInput type="text">
+<button (click)="logInputValue(myInput.value)">Log Input Value</button>
+```
+
+In this example, `#myInput` is the template reference variable. You can then access this variable in your component code using `@ViewChild` or `@ViewChildren` decorators. For example:
+
+```typescript
+import { Component, ViewChild } from '@angular/core';
+
+@Component({
+  selector: 'app-example',
+  templateUrl: './example.component.html',
+  styleUrls: ['./example.component.css']
+})
+export class ExampleComponent {
+  @ViewChild('myInput') myInput: ElementRef;
+
+  logInputValue(value: string) {
+    console.log(value);
+  }
+}
+```
+
+In this component, `@ViewChild('myInput') myInput: ElementRef;` is used to get a reference to the input element with the template reference variable `#myInput`. Then, you can access properties and methods of the input element through `this.myInput.nativeElement`.
+
+Template reference variables are useful for accessing form inputs, DOM elements, and Angular components from your component code. They provide a way to interact with the template from your component class.
+
+
+## 
+ya mde apna # cha warp krun akda   input kiwa element cha point kru skto
+ani  input mde template refrence use kelne jewa apn input(text) as pass kel ya mde text refrence varible ahe 
+pn (ts) file  accresss kraych asel ya value kiwa data tr 
+ 
+"text.target.value " as lihinachi garj nahi direct apn "text.value" lihu ServiceWorkerContainer
+
+## viewchild cha wapr krun apn akda Element la access krun skto 
+ani tyacha propertis ani attribute la modifi krun skto

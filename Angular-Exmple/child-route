@@ -1,0 +1,108 @@
+Child routes in Angular are routes that are nested within other routes. They allow you to define hierarchical navigation structures within your application. Child routes are commonly used when you have nested components or when you want to organize your application's navigation into logical parent-child relationships.
+
+To define child routes, you typically set up your routes in the `RouterModule.forChild()` method within a feature module. Here's a basic example of how you can set up child routes:
+
+1. Define your parent route with child routes in a feature module:
+
+```typescript
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+import { ParentComponent } from './parent.component';
+import { Child1Component } from './child1.component';
+import { Child2Component } from './child2.component';
+
+const routes: Routes = [
+  {
+    path: 'parent',
+    component: ParentComponent,
+    children: [
+      { path: 'child1', component: Child1Component },
+      { path: 'child2', component: Child2Component }
+    ]
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class ParentRoutingModule { }
+```
+
+2. Implement your parent component (`ParentComponent`), and define its template with `<router-outlet>` to render child components:
+
+```html
+<h1>Parent Component</h1>
+<nav>
+  <a routerLink="child1">Child 1</a>
+  <a routerLink="child2">Child 2</a>
+</nav>
+<router-outlet></router-outlet>
+```
+
+3. Create your child components (`Child1Component` and `Child2Component`) with their respective templates.
+
+4. Import and include the `ParentRoutingModule` in your parent module:
+
+```typescript
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ParentRoutingModule } from './parent-routing.module';
+
+import { ParentComponent } from './parent.component';
+import { Child1Component } from './child1.component';
+import { Child2Component } from './child2.component';
+
+@NgModule({
+  declarations: [
+    ParentComponent,
+    Child1Component,
+    Child2Component
+  ],
+  imports: [
+    CommonModule,
+    ParentRoutingModule
+  ]
+})
+export class ParentModule { }
+```
+
+With this setup, when you navigate to `/parent`, the `ParentComponent` will be loaded and the child routes will be rendered within its `<router-outlet>`. Navigating to `/parent/child1` or `/parent/child2` will load the corresponding child component inside the `ParentComponent`.
+
+
+
+## ya mde smja aple kahi childe routes ahe tr te apn parent componet nde comma krun child array mde define kru skto
+
+## ya mde ajun ak ahe product componet ahe tya mde children product-list componet ahe 
+
+------tr smja apn /product page access krt ahe tr te nahi honar as 
+
+
+const routes: Routes = [
+    {
+      path: 'parent',
+      component: Product,
+      children: [
+        { path: 'child1', component: Child1Component },
+        { path: 'child2', component: Child2Component }
+      ]
+    }
+  ];
+  
+
+  ------tr smja apn /product page access krt ahe tr te nahi honar as ya sathi product ch route he children mde karwa lagel
+
+
+  const routes: Routes = [
+      {
+        path: 'product', 
+        children: [
+            
+          { path: '', component: product },
+          { path: 'child1', component: Child1Component },
+          { path: 'child2', component: Child2Component }
+        ]
+      }
+    ];
+    

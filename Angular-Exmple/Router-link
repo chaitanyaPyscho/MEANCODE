@@ -1,0 +1,18 @@
+<a  [routerLink]="['/routePath']" routerLinkActive="router-link-active" ></a>
+
+## amja alpla kde ak  navtabs ase konta war click kel tr active ahe ka nahi smjna sathi 
+apn   routerLinkActive="router-link-active"  wa pr krto ya cha wapar krun
+tab active ahe ka nahi check krun skto
+
+## ani a tag href use nahi kryahc karan page refersh hoto tr direct apn routerlink use krych 
+
+## ani ta yamde ajunn ak ahe smja routerLinkActive he apna application cha url war base ahe
+
+exa - localhost:3000/contact 
+
+tr url mde conact ahe tr conact link active hoiyil
+
+## pm ya url mde localhost:3000 pn ahe he HOME Componet la point krto 
+
+tr home Componet pn active hoyil tr tya sathi apn   [routerLinkActiveOptions]="{exact:true}" 
+ya ch warp kelnae je router active ahe tyla ch active class apply hoyil 
