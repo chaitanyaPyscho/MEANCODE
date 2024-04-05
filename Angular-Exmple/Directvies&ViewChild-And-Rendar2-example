@@ -1,0 +1,53 @@
+If you want to access the directive from another component using `@ViewChild`, you need to make sure the directive has a selector that allows it to be queried with `@ViewChild`. Here's how you can do it:
+
+1. **Modify the Directive**:
+
+```typescript
+import { Directive, ElementRef, Renderer2 } from '@angular/core';
+import { ColorService } from './color.service';
+
+@Directive({
+  selector: '[appChangeColorOnClick]'
+})
+export class ChangeColorOnClickDirective {
+
+  constructor(private el: ElementRef, private renderer: Renderer2, private colorService: ColorService) { }
+
+  changeColor() {
+    this.colorService.generateRandomColor();
+    this.renderer.setStyle(this.el.nativeElement, 'background-color', this.colorService.currentColor);
+  }
+}
+```
+
+2. **Access the Directive in Another Component**:
+
+```typescript
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { ChangeColorOnClickDirective } from './change-color-on-click.directive';
+
+@Component({
+  selector: 'app-my-component',
+  template: `
+    <button (click)="changeColor()">Change Color from My Component</button>
+  `
+})
+export class MyComponent implements AfterViewInit {
+
+  @ViewChild(ChangeColorOnClickDirective) colorDirective: ChangeColorOnClickDirective;
+
+  constructor() { }
+
+  ngAfterViewInit() {
+    // You can access the directive instance here
+    // For example, you can call the changeColor() method directly
+    // this.colorDirective.changeColor();
+  }
+
+  changeColor() {
+    this.colorDirective.changeColor();
+  }
+}
+```
+
+In this example, `@ViewChild` is used to query the directive instance within the `MyComponent` component. Once it's available in the `ngAfterViewInit` lifecycle hook, you can call the `changeColor()` method on the directive instance to trigger the color change. Make sure to import the `ChangeColorOnClickDirective` and `ColorService` where necessary.

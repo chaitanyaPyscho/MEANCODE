@@ -1,0 +1,107 @@
+Sure, let's create a simple example demonstrating the usage of `@ViewChild()` decorator in Angular:
+
+Suppose we have a child component called `ChildComponent`:
+
+```typescript
+// child.component.ts
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  template: `
+    <p>Child Component</p>
+  `
+})
+export class ChildComponent {
+  message = 'Hello from Child';
+}
+```
+
+Now, let's say we want to access a property or invoke a method from `ChildComponent` in its parent component.
+
+Here's how you can achieve that using `@ViewChild()`:
+
+```typescript
+// parent.component.ts
+
+import { Component, ViewChild } from '@angular/core';
+import { ChildComponent } from './child.component';
+
+@Component({
+  selector: 'app-parent',
+  template: `
+    <app-child></app-child>
+    <button (click)="getMessage()">Get Message from Child</button>
+  `
+})
+export class ParentComponent {
+  @ViewChild(ChildComponent) childComponent: ChildComponent;
+
+  getMessage() {
+    alert(this.childComponent.message);
+  }
+}
+```
+
+In the `ParentComponent`, we import `ViewChild` from `@angular/core` and declare a property `childComponent` with the type `ChildComponent`. We annotate it with `@ViewChild(ChildComponent)` to specify that we want to query for the `ChildComponent` instance.
+
+In the template, we include the `ChildComponent` using its selector `<app-child></app-child>`. We also have a button that triggers the `getMessage()` method when clicked.
+
+Now, when the button is clicked, the `getMessage()` method is called, and it accesses the `message` property of the `ChildComponent` through `this.childComponent.message`.
+
+This is a basic example of how you can use `@ViewChild()` to access properties or methods of child components in Angular.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+If you want to get a reference to an HTML element in the template of a parent component using `@ViewChild()`, you can use Angular's `ElementRef`. Here's how you can achieve that:
+
+```typescript
+// parent.component.ts
+
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+
+@Component({
+  selector: 'app-parent',
+  template: `
+    <div #myElement>
+      This is an HTML element
+    </div>
+    <button (click)="getStyle()">Get Style</button>
+  `
+})
+export class ParentComponent implements AfterViewInit {
+  @ViewChild('myElement', { static: false }) myElement: ElementRef;
+
+  ngAfterViewInit() {
+    console.log(this.myElement.nativeElement);
+  }
+
+  getStyle() {
+    alert(window.getComputedStyle(this.myElement.nativeElement).getPropertyValue('color'));
+  }
+}
+```
+
+In this example:
+- We use `ViewChild` to get a reference to the `div` element with the template reference variable `#myElement`.
+- We use `ElementRef` to access the native HTML element.
+- In the `ngAfterViewInit` lifecycle hook, we log the `nativeElement` to the console.
+- We also have a `getStyle()` method that retrieves the computed style of the element when a button is clicked.
+
+Make sure to set `{ static: false }` in `@ViewChild()` if you're querying an element that is inside a structural directive (like `*ngIf` or `*ngFor`), or otherwise Angular may not be able to find it before it's rendered. 

@@ -1,0 +1,98 @@
+Sure, here's a simple example of using observables in Angular along with an explanation:
+
+Observables are a powerful way to handle asynchronous data streams in Angular applications. They provide support for passing values between different parts of your application over time. Let's create a basic example to demonstrate how observables work.
+
+1. **Create a Service with an Observable:**
+
+First, let's create a service that provides an observable stream of data. In this example, we'll create a service called `DataService`:
+
+```typescript
+// data.service.ts
+
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DataService {
+  private data: string[] = ['Data 1', 'Data 2', 'Data 3'];
+
+  getData(): Observable<string[]> {
+    return of(this.data);
+  }
+}
+```
+
+In this service:
+- We import `Observable` and `of` from `rxjs` to create an observable.
+- We define a method `getData()` which returns an observable of string array.
+
+2. **Consume the Observable in a Component:**
+
+Now, let's consume the observable in a component to fetch the data from the service:
+
+```typescript
+// data.component.ts
+
+import { Component, OnInit } from '@angular/core';
+import { DataService } from './data.service';
+
+@Component({
+  selector: 'app-data',
+  template: `
+    <div *ngFor="let item of data$ | async">
+      {{ item }}
+    </div>
+  `
+})
+export class DataComponent implements OnInit {
+  data$: Observable<string[]>;
+
+  constructor(private dataService: DataService) { }
+
+  ngOnInit() {
+    this.data$ = this.dataService.getData();
+  }
+}
+```
+
+In this component:
+- We import `DataService` to fetch the data.
+- In the `ngOnInit()` method, we subscribe to the observable returned by `getData()` method of the service and assign it to `data$`.
+- We use the `async` pipe in the template to subscribe to the `data$` observable and automatically handle unsubscribing when the component is destroyed.
+
+3. **Register Components and Services:**
+
+Register the `DataComponent` and `DataService` in the appropriate module:
+
+```typescript
+// app.module.ts
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { DataComponent } from './data.component';
+import { DataService } from './data.service';
+
+@NgModule({
+  imports: [BrowserModule],
+  declarations: [DataComponent],
+  providers: [DataService], // Register DataService
+  bootstrap: [DataComponent]
+})
+export class AppModule { }
+```
+
+4. **Use the Component:**
+
+Include the `DataComponent` selector in the root component's template (e.g., `app.component.html`):
+
+```html
+<!-- app.component.html -->
+
+<app-data></app-data>
+```
+
+Now, when you run your Angular application, the `DataComponent` will render and fetch the data from the `DataService` using an observable. The data will be displayed in the template using `ngFor` directive. Observables allow us to handle asynchronous data streams easily and efficiently in Angular applications.
+
+

@@ -1,0 +1,90 @@
+Sure, let's start with explaining `Subject` and `BehaviorSubject` and then provide simple examples for each:
+
+### Subject:
+
+A `Subject` is a special type of Observable that allows values to be multicasted to many observers. It serves as both an Observable and an Observer. You can manually push values into a `Subject` using its `next()` method, and those values will be emitted to all subscribed observers.
+
+### BehaviorSubject:
+
+A `BehaviorSubject` is a variant of `Subject` with a "current value" feature. It stores the latest value emitted to its observers, and any observer that subscribes to it immediately receives the last emitted value. This makes it useful for representing "current state" or "last known value" scenarios.
+
+### Example:
+
+Let's consider a simple example where we have a counter service that uses both `Subject` and `BehaviorSubject`.
+
+1. **Counter Service using Subject:**
+
+```typescript
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CounterService {
+  private counterSubject = new Subject<number>();
+  counter$ = this.counterSubject.asObservable();
+
+  increment() {
+    this.counterSubject.next(1);
+  }
+}
+```
+
+In this example:
+- We create a `CounterService` with a private `Subject` called `counterSubject`.
+- We expose an observable `counter$` derived from the subject.
+- When `increment()` is called, it pushes the value `1` into the subject using `next()`.
+
+2. **Counter Service using BehaviorSubject:**
+
+```typescript
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CounterService {
+  private counterSubject = new BehaviorSubject<number>(0); // Initial value is 0
+  counter$ = this.counterSubject.asObservable();
+
+  increment() {
+    const currentValue = this.counterSubject.getValue();
+    this.counterSubject.next(currentValue + 1);
+  }
+}
+```
+
+In this example:
+- We create a `CounterService` with a private `BehaviorSubject` called `counterSubject` with an initial value of `0`.
+- We expose an observable `counter$` derived from the behavior subject.
+- When `increment()` is called, it retrieves the current value using `getValue()` and increments it before pushing the new value into the subject using `next()`.
+
+### Usage in Components:
+
+```typescript
+import { Component } from '@angular/core';
+import { CounterService } from './counter.service';
+
+@Component({
+  selector: 'app-counter',
+  template: `
+    <button (click)="increment()">Increment</button>
+    <p>Counter: {{ counter }}</p>
+  `
+})
+export class CounterComponent {
+  counter: number;
+
+  constructor(private counterService: CounterService) {
+    this.counterService.counter$.subscribe(value => this.counter = value);
+  }
+
+  increment() {
+    this.counterService.increment();
+  }
+}
+```
+
+In both cases, you can subscribe to the `counter$` observable in your components to react to changes in the counter value. However, with `BehaviorSubject`, you also get the initial value immediately upon subscription.

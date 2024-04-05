@@ -1,0 +1,74 @@
+`ContentChild` is a decorator in Angular used to query and access a single instance of a directive or component within the content of its parent component's template. It allows a parent component to interact with its child components or directives that are projected into its content using Angular's content projection mechanism (`<ng-content>`).
+
+Here's how to use `ContentChild` and an explanation:
+
+1. **Create Child Component:**
+
+   ```typescript
+   import { Component } from '@angular/core';
+
+   @Component({
+     selector: 'app-child',
+     template: `
+       <div>
+         Child Component
+       </div>
+     `
+   })
+   export class ChildComponent {
+     // Child component logic
+   }
+   ```
+
+2. **Create Parent Component:**
+
+   ```typescript
+   import { Component, ContentChild, AfterContentInit } from '@angular/core';
+   import { ChildComponent } from './child.component';
+
+   @Component({
+     selector: 'app-parent',
+     template: `
+       <div>
+         <h2>Parent Component</h2>
+         <ng-content></ng-content> <!-- This is where child components will be projected -->
+       </div>
+     `
+   })
+   export class ParentComponent implements AfterContentInit {
+     @ContentChild(ChildComponent) childComponent: ChildComponent;
+
+     ngAfterContentInit() {
+       if (this.childComponent) {
+         console.log('Child Component found:', this.childComponent);
+       } else {
+         console.log('Child Component not found');
+       }
+     }
+   }
+   ```
+
+   Explanation:
+   - The `ParentComponent` template includes `<ng-content></ng-content>` to project child components into its content area.
+   - The `ContentChild` decorator is used to query the first instance of `ChildComponent` within the content of the `ParentComponent`.
+   - In the `ngAfterContentInit` lifecycle hook, we check if a child component instance was found using `ContentChild`. If found, we can interact with it as needed.
+
+3. **App Module:**
+
+   Import and declare both the `ParentComponent` and `ChildComponent` in the AppModule.
+
+4. **Usage in Template:**
+
+   Use the `app-parent` selector in any other component's template where you want to display the parent component and project child components into its content.
+
+   ```html
+   <app-parent>
+     <app-child></app-child>
+   </app-parent>
+   ```
+
+5. **Result:**
+
+   When the `ParentComponent` is rendered, it projects the `ChildComponent` into its content area. The `ContentChild` decorator in the `ParentComponent` class captures the instance of the `ChildComponent`, and we can perform any necessary actions or logic with it.
+
+This example demonstrates how to use `ContentChild` to access a child component within the content of a parent component's template. It allows the parent component to interact with and manipulate its child components that are projected into its content area.

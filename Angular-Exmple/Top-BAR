@@ -1,0 +1,264 @@
+Let's break down the TypeScript code in the provided `TopbarComponent`:
+
+    ```typescript
+import { Component, OnInit, EventEmitter, Output, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { EventService } from '../../core/services/event.service';
+
+//Logout
+import { environment } from '../../../environments/environment';
+import { AuthenticationService } from '../../core/services/auth.service';
+import { Router } from '@angular/router';
+
+// Language
+import { CookieService } from 'ngx-cookie-service';
+import { LanguageService } from '../../core/services/language.service';
+import { TranslateService } from '@ngx-translate/core';
+```
+
+    - This section imports necessary Angular modules, services, and environment settings used in the`TopbarComponent`.
+- `Component`, `OnInit`, `EventEmitter`, and`Output` are Angular decorators and interfaces used for defining components and handling events.
+- `DOCUMENT` is imported from `@angular/common` to access the global `document` object.
+- `EventService`, `AuthenticationService`, `Router`, `CookieService`, `LanguageService`, and`TranslateService` are imported from their respective locations to use services and functionalities provided by Angular and other libraries.
+
+```typescript
+@Component({
+  selector: 'app-topbar',
+  templateUrl: './topbar.component.html',
+  styleUrls: ['./topbar.component.scss']
+})
+```
+
+    - The`@Component` decorator defines the metadata for the`TopbarComponent`.
+- `selector: 'app-topbar'` specifies the component's selector which is used to reference it in HTML.
+    - `templateUrl` points to the HTML template file for the component.
+- `styleUrls` specifies the stylesheets used for styling the component.
+
+```typescript
+export class TopbarComponent implements OnInit {
+```
+
+    - `export class TopbarComponent` defines the `TopbarComponent` class which implements the`OnInit` interface, indicating that it has an`ngOnInit()` method.
+
+```typescript
+element: any;
+mode: string | undefined;
+@Output() mobileMenuButtonClicked = new EventEmitter();
+flagvalue: any;
+valueset: any;
+countryName: any;
+cookieValue: any;
+baseURL=environment.baseURL;
+```
+
+- These lines declare class properties used within the`TopbarComponent`. 
+- `element`, `mode`, `mobileMenuButtonClicked`, `flagvalue`, `valueset`, `countryName`, `cookieValue`, and`baseURL` are all declared.
+
+```typescript
+constructor(
+  @Inject(DOCUMENT) private document: any,
+  private eventService: EventService,
+  public languageService: LanguageService,
+  public _cookiesService: CookieService,
+  public translate: TranslateService,
+  private authService: AuthenticationService,
+  private router: Router,
+  public authS: AuthenticationService
+) { }
+```
+
+    - The constructor function defines dependencies to be injected into the`TopbarComponent`.
+- `@Inject(DOCUMENT) private document: any` injects the global `document` object.
+- Other services such as `EventService`, `LanguageService`, `CookieService`, `TranslateService`, `AuthenticationService`, and`Router` are injected for use within the component.
+
+```typescript
+ngOnInit(): void {
+  this.element = document.documentElement;
+  // Other initialization logic here...
+}
+```
+
+    - The`ngOnInit()` method is called automatically when the component is initialized.
+- It initializes the `element` property with the global`document.documentElement`.
+
+The remaining code in the`TopbarComponent` consists of various methods and properties used for handling events, changing modes, setting languages, and logging out users.These methods interact with services and perform various functionalities based on user actions and application state.
+
+
+
+
+
+
+###############################
+
+Let's break down the logic of the code block you provided:
+
+    ```typescript
+// Cookies wise Language set
+this.cookieValue = this._cookiesService.get('lang');
+const val = this.listLang.filter(x => x.lang === this.cookieValue);
+this.countryName = val.map(element => element.text);
+if (val.length === 0) {
+  if (this.flagvalue === undefined) { 
+    this.valueset = 'assets/images/flags/us.svg'; 
+  }
+} else {
+  this.flagvalue = val.map(element => element.flag);
+}
+```
+
+This block of code appears to be related to setting the language based on a cookie value and determining the corresponding country flag.
+
+1. ** Cookie Value Retrieval:**
+    ```typescript
+   this.cookieValue = this._cookiesService.get('lang');
+   ```
+    - It retrieves the value of the cookie named 'lang' using `get()` method from`CookieService`.
+   - The retrieved value is stored in the`cookieValue` variable.
+
+2. ** Filtering Language List:**
+    ```typescript
+   const val = this.listLang.filter(x => x.lang === this.cookieValue);
+   ```
+    - It filters the `listLang` array to find objects where the `lang` property matches the value of the cookie(`cookieValue`).
+   - The filtered result is stored in the`val` variable.
+
+3. ** Mapping Country Name:**
+    ```typescript
+   this.countryName = val.map(element => element.text);
+   ```
+    - It maps the `text` property of each object in the filtered result(`val`) to extract country names.
+   - The extracted country names are stored in the`countryName` variable.
+
+4. ** Handling Flag Value:**
+    ```typescript
+   if (val.length === 0) {
+     if (this.flagvalue === undefined) { 
+       this.valueset = 'assets/images/flags/us.svg'; 
+     }
+   } else {
+     this.flagvalue = val.map(element => element.flag);
+   }
+   ```
+    - If there are no matches found(`val.length === 0`), it checks if `flagvalue` is`undefined`.
+   - If`flagvalue` is`undefined`, it sets `valueset` to a default flag image path('assets/images/flags/us.svg').
+   - Otherwise, if there are matches found, it maps the `flag` property of each object in the filtered result(`val`) to extract flag image paths, and stores them in the`flagvalue` variable.
+
+    Overall, this logic retrieves the language value from a cookie, filters a list of language objects to find a match, extracts country names and flag image paths, and handles cases where no match is found or the flag value is undefined.It's essentially responsible for setting the language and associated flag based on the cookie value.
+
+############################
+
+
+############################ Full screen 
+
+
+
+This method, named`fullscreen()`, is responsible for toggling the fullscreen mode of the browser window.Let's break down its logic:
+
+    ```typescript
+fullscreen() {
+  // Toggle a CSS class on the body to visually indicate fullscreen mode
+  document.body.classList.toggle('fullscreen-enable');
+
+  // Check if the document is currently not in fullscreen mode
+  if (!document.fullscreenElement && !this.element.mozFullScreenElement &&
+      !this.element.webkitFullscreenElement) {
+    // If not in fullscreen, request fullscreen mode based on browser compatibility
+    if (this.element.requestFullscreen) {
+      this.element.requestFullscreen();
+    } else if (this.element.mozRequestFullScreen) {
+      /* Firefox */
+      this.element.mozRequestFullScreen();
+    } else if (this.element.webkitRequestFullscreen) {
+      /* Chrome, Safari and Opera */
+      this.element.webkitRequestFullscreen();
+    } else if (this.element.msRequestFullscreen) {
+      /* IE/Edge */
+      this.element.msRequestFullscreen();
+    }
+  } else {
+    // If already in fullscreen, exit fullscreen mode based on browser compatibility
+    if (this.document.exitFullscreen) {
+      this.document.exitFullscreen();
+    } else if (this.document.mozCancelFullScreen) {
+      /* Firefox */
+      this.document.mozCancelFullScreen();
+    } else if (this.document.webkitExitFullscreen) {
+      /* Chrome, Safari and Opera */
+      this.document.webkitExitFullscreen();
+    } else if (this.document.msExitFullscreen) {
+      /* IE/Edge */
+      this.document.msExitFullscreen();
+    }
+  }
+}
+```
+
+Explanation:
+
+1. ** Toggling CSS Class:**
+    - The method starts by toggling the CSS class `fullscreen-enable` on the `body` element.This class is likely used for styling to visually indicate fullscreen mode.
+
+2. ** Checking Fullscreen State:**
+    - It checks if the document is not currently in fullscreen mode by verifying that`document.fullscreenElement`, `this.element.mozFullScreenElement`, and`this.element.webkitFullscreenElement` are all falsy.These properties represent the fullscreen element in different browsers.
+
+3. ** Requesting Fullscreen:**
+    - If the document is not in fullscreen mode, it attempts to request fullscreen mode based on browser compatibility.
+   - It checks for the availability of various methods(`requestFullscreen`, `mozRequestFullScreen`, `webkitRequestFullscreen`, `msRequestFullscreen`) and calls the appropriate one for the current browser.
+
+4. ** Exiting Fullscreen:**
+    - If the document is already in fullscreen mode, it attempts to exit fullscreen mode based on browser compatibility.
+   - It checks for the availability of various methods(`exitFullscreen`, `mozCancelFullScreen`, `webkitExitFullscreen`, `msExitFullscreen`) and calls the appropriate one for the current browser.
+
+    Overall, this method provides a cross - browser solution for toggling the fullscreen mode of the browser window.It ensures that fullscreen mode is requested or exited correctly based on the browser's capabilities.
+
+################################# Dark Mode
+
+
+The `changeMode()` method is responsible for toggling between light and dark modes in the application.Let's break down its logic:
+
+    ```typescript
+changeMode(mode: string) {
+  // Update the mode property with the provided mode
+  this.mode = mode;
+
+  // Broadcast an event to notify other components about the mode change
+  this.eventService.broadcast('changeMode', mode);
+
+  // Based on the provided mode, update the layout mode and sidebar mode of the body element
+  switch (mode) {
+    case 'light':
+      // Set the body's data-layout-mode attribute to 'light'
+      document.body.setAttribute('data-layout-mode', "light");
+      // Set the body's data-sidebar attribute to 'light'
+      document.body.setAttribute('data-sidebar', "light");
+      break;
+    case 'dark':
+      // Set the body's data-layout-mode attribute to 'dark'
+      document.body.setAttribute('data-layout-mode', "dark");
+      // Set the body's data-sidebar attribute to 'dark'
+      document.body.setAttribute('data-sidebar', "dark");
+      break;
+    default:
+      // Set the body's data-layout-mode attribute to 'light' if no mode is provided or unrecognized mode is provided
+      document.body.setAttribute('data-layout-mode', "light");
+      break;
+  }
+}
+```
+
+Explanation:
+
+1. ** Updating Mode Property:**
+    - The method accepts a `mode` parameter, which is a string representing the desired mode('light' or 'dark').
+   - It updates the component's `mode` property with the provided mode.
+
+2. ** Broadcasting Mode Change:**
+    - The method broadcasts an event using the `broadcast()` method of `EventService` to notify other components about the mode change.This allows other components to react to the mode change if needed.
+
+3. ** Switch Statement:**
+    - The method uses a `switch` statement to determine how to update the layout mode and sidebar mode based on the provided mode.
+   - If the mode is 'light', it sets the `data-layout-mode` and `data-sidebar` attributes of the body element to 'light'.
+   - If the mode is 'dark', it sets these attributes to 'dark'.
+   - If the provided mode is neither 'light' nor 'dark'(or not provided at all), it defaults to setting these attributes to 'light'.
+
+    Overall, this method provides a way to dynamically switch between different modes(light and dark) in the application by updating the attributes of the body element based on the selected mode.   

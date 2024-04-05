@@ -1,0 +1,93 @@
+It seems like you want to add roles to your routes using Angular route configuration. Below is an example of how you can modify your route configuration to include roles:
+
+```typescript
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard'; // Assuming you have implemented AuthGuard
+
+const routes: Routes = [
+  { 
+    path: 'admin', 
+    component: DashboardComponent, 
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), 
+    canActivate: [AuthGuard],
+    data: { roles: ['admin'] } // Define roles allowed for this route
+  },
+  { 
+    path: 'vendor', 
+    component: VendorComponent, 
+    loadChildren: () => import('./vendor/vendor.module').then(m => m.VendorModule), 
+    canActivate: [AuthGuard],
+    data: { roles: ['vendor'] } // Define roles allowed for this route
+  },
+  { 
+    path: 'auth', 
+    loadChildren: () => import('./account/account.module').then(m => m.AccountModule) 
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+```
+
+In this configuration:
+
+- `data` property is added to each route where roles are defined. For example, `{ path: 'admin', ..., data: { roles: ['admin'] } }` specifies that only users with the role 'admin' are allowed to access the '/admin' route.
+- The `AuthGuard` is applied to routes that require authentication.
+- When a user navigates to a route, Angular checks if the user's role matches any of the roles specified for that route. If the user's role is not found in the allowed roles array (`data.roles`), the `AuthGuard` will redirect the user to a different route based on your implementation.
+
+Make sure to adjust the `AuthGuard` logic to handle the roles specified in the route data. This typically involves checking if the current user's role matches any of the roles allowed for the route.
+
+
+
+
+
+If the user's role is 'user' and the route's data specifies that only 'admin' roles are allowed, then the user should not be allowed to access that route and should be redirected accordingly. 
+
+Your `AuthGuard` logic should handle this scenario correctly. Let's review your logic:
+
+```typescript
+if (route.data?.['roles'] && route.data?.['roles'].indexOf(currentUser.role) === -1) {
+    switch (currentUser.role) {
+        case 'admin':
+            this.router.navigate(['/admin']);
+            break;
+        case 'user':
+            this.router.navigate(['/user']);
+            break;
+    }
+}
+```
+
+In this code:
+
+- `route.data?.['roles']` checks if roles are specified for the current route.
+- `route.data?.['roles'].indexOf(currentUser.role) === -1` checks if the current user's role is not found in the allowed roles array.
+- If the user's role is not allowed for the route, it navigates the user to a specific route based on their role.
+
+If the current user's role is 'user', but the route's data specifies that only 'admin' roles are allowed, then the condition `route.data?.['roles'].indexOf(currentUser.role) === -1` will be true, and the `case 'user'` block will execute, navigating the user to `/user`. 
+
+To ensure that users with the 'user' role are not redirected, you need to update your logic to only redirect users if the role is 'admin' and not in the allowed roles array. For example:
+
+```typescript
+if (route.data?.['roles'] && route.data?.['roles'].indexOf(currentUser.role) === -1 && currentUser.role === 'admin') {
+    this.router.navigate(['/admin']);
+}
+```
+
+This way, users with the 'user' role won't be redirected when the route only allows 'admin' roles.
+
+
+
+
+
+The code `this.router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });` is used to navigate the user to the login page if they are not authenticated and trying to access a protected route. Let's break down this code:
+
+- `this.router.navigate(['/auth/login'])`: This part of the code navigates the user to the '/auth/login' route. It uses the Angular Router's `navigate()` method to navigate to the specified URL.
+
+- `{ queryParams: { returnUrl: state.url } }`: This part specifies query parameters to be passed along with the navigation. In this case, it includes a query parameter named 'returnUrl' with the value of `state.url`. The `state.url` represents the URL the user was trying to access before being redirected to the login page. This information is useful because after the user logs in successfully, they should be redirected back to the original URL they were trying to access.
+
+So, when the user is not authenticated and tries to access a protected route, this code navigates them to the login page while also storing the original URL they were trying to access as a query parameter. After the user successfully logs in, they will be redirected back to the original URL thanks to the stored 'returnUrl' query parameter.
